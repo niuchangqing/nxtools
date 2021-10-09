@@ -1,3 +1,4 @@
 rootProject.name = 'nxtools'
 include 'common'
+include 'jwt-boot-starter'
 

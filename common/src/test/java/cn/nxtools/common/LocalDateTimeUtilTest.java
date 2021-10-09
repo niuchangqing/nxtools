@@ -14,18 +14,9 @@ public class LocalDateTimeUtilTest {
     @Test
     public void currentTimeMillisTest() {
         long l = LocalDateTimeUtil.currentTimeMillis();
-        long l1 = LocalDateTimeUtil.currentTimeMillis(ZoneId.of("America/New_York"));
-        long l2 = LocalDateTimeUtil.currentTimeMillis(ZoneOffset.UTC);
-        long l3 = LocalDateTimeUtil.currentTimeMillis(ZoneOffset.ofHours(-8));
         System.out.println(l);
-        System.out.println(l1);
-        System.out.println(l2);
-        System.out.println(l3);
 
         System.out.println(new Date(l));
-        System.out.println(new Date(l1));
-        System.out.println(new Date(l2));
-        System.out.println(new Date(l3));
     }
 
 
@@ -102,12 +93,9 @@ public class LocalDateTimeUtilTest {
     @Test
     public void sjcTest() {
         long l = LocalDateTimeUtil.currentTimeMillis();
-        long l1 = LocalDateTimeUtil.currentTimeMillis(ZoneOffset.UTC);
         System.out.println(l);
-        System.out.println(l1);
 
         System.out.println(LocalDateTimeUtil.ofMillis(l).toString());
-        System.out.println(LocalDateTimeUtil.ofMillis(l1,ZoneOffset.UTC).toString());
 
         System.out.println(LocalDateTimeUtil.now(ZoneOffset.UTC).toString());
 
@@ -119,11 +107,7 @@ public class LocalDateTimeUtilTest {
 
         System.out.println(LocalDateTimeUtil.ofSecond(LocalDateTimeUtil.currentTimeSecond(),ZoneOffset.UTC).toString());
 
-        System.out.println(LocalDateTimeUtil.ofSecond(LocalDateTimeUtil.currentTimeSecond(ZoneOffset.UTC),ZoneOffset.UTC,ZoneOffset.ofHours(4)).toString());
-
         System.out.println(LocalDateTimeUtil.ofMillis(new Date().getTime()).toString());
-        System.out.println(LocalDateTimeUtil.ofMillis(LocalDateTimeUtil.currentTimeMillis(ZoneOffset.UTC)).toString());
-        System.out.println(LocalDateTimeUtil.ofMillis(LocalDateTimeUtil.currentTimeMillis(ZoneOffset.UTC),ZoneOffset.UTC, ZoneOffset.ofHours(4)).toString());
 
         System.out.println(LocalDateTimeUtil.ofDate(new Date(), ZoneOffset.UTC).toString());
     }

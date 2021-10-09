@@ -71,29 +71,11 @@ public class LocalDateTimeUtil {
     }
 
     /**
-     * 获取指定时区当前时间毫秒时间戳
-     * @param zoneId            时区
-     * @return                  毫秒时间戳
-     */
-    public static long currentTimeMillis(ZoneId zoneId) {
-        return LocalDateTime.now(zoneId).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-    }
-
-    /**
      * 获取当前时间的秒时间戳,默认系统时区
      * @return              秒时间戳
      */
     public static long currentTimeSecond() {
         return currentTimeMillis() / 1000;
-    }
-
-    /**
-     * 获取指定时区当前时间秒时间戳
-     * @param zoneId            时区
-     * @return                  秒时间戳
-     */
-    public static long currentTimeSecond(ZoneId zoneId) {
-        return currentTimeMillis(zoneId) / 1000;
     }
 
     /**
@@ -113,25 +95,8 @@ public class LocalDateTimeUtil {
      * @return                  LocalDateTime
      */
     public static LocalDateTime ofMillis(long timestamp, ZoneId zoneId) {
-        return ofMillis(timestamp, ZoneId.systemDefault(), zoneId);
-    }
-
-    /**
-     * 毫秒时间戳转LocalDateTime，指定时区，指定时间戳时区
-     * @param timestamp         毫秒时间戳
-     * @param timestampZoneId   时间戳时区
-     * @param zoneId            时区
-     * @return                  LocalDateTime
-     */
-    public static LocalDateTime ofMillis(long timestamp, ZoneId timestampZoneId, ZoneId zoneId) {
-        checkNotNull(timestampZoneId);
-        checkNotNull(zoneId);
         Instant instant = Instant.ofEpochMilli(timestamp);
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        ZonedDateTime zonedDateTime = localDateTime.atZone(timestampZoneId);
-        //转换对应时区后的时间戳
-        long millis = zonedDateTime.withZoneSameInstant(zoneId).toLocalDateTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis),ZoneId.systemDefault());
+        return LocalDateTime.ofInstant(instant,zoneId);
     }
 
     /**
@@ -151,25 +116,8 @@ public class LocalDateTimeUtil {
      * @return                  LocalDateTime
      */
     public static LocalDateTime ofSecond(long timestamp, ZoneId zoneId) {
-        return ofSecond(timestamp, ZoneId.systemDefault(), zoneId);
-    }
-
-    /**
-     * 秒时间戳转LocalDateTime,指定时区,指定时间戳的时区
-     * @param timestamp                 时间戳
-     * @param timestampZoneId           时间戳时区
-     * @param zoneId                    转换后的LocalDateTime时区
-     * @return                          LocalDateTime
-     */
-    public static LocalDateTime ofSecond(long timestamp, ZoneId timestampZoneId, ZoneId zoneId) {
-        checkNotNull(timestampZoneId);
-        checkNotNull(zoneId);
         Instant instant = Instant.ofEpochSecond(timestamp);
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        ZonedDateTime zonedDateTime = localDateTime.atZone(timestampZoneId);
-        //转换对应时区后的时间戳
-        long millis = zonedDateTime.withZoneSameInstant(zoneId).toLocalDateTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis),ZoneId.systemDefault());
+        return LocalDateTime.ofInstant(instant, zoneId);
     }
 
     /**

@@ -1,11 +1,50 @@
-allprojects {
-	apply plugin: "java"
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+buildscript {
 	repositories {
 		mavenCentral()
 	}
 	dependencies {
-		testCompile group: 'junit', name: 'junit', version: "${junitVersion}"
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.5.5")
 	}
+}
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.1.0'
+}
+allprojects {
+	apply plugin: 'java-library'
+	apply plugin: 'com.github.johnrengelman.shadow'
+	apply plugin: "maven-publish"
+	apply plugin: "io.spring.dependency-management"
+
+	group 'cn.nxtools'
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		testImplementation group: 'junit', name: 'junit', version: "${junitVersion}"
+	}
+
+	shadowJar {
+		zip64 true
+		project.configurations.api.canBeResolved = true
+		configurations = [project.configurations.api]
+	}
+
+	task sourceJar(type: Jar, dependsOn: classes) {
+		classifier "sources"
+		from sourceSets.main.allSource
+	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				from components.java
+				artifact sourceJar
+			}
+		}
+	}
+
+	publish.dependsOn(build)
 }

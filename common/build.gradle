@@ -2,8 +2,6 @@ plugins {
     id 'java'
 }
 
-group 'cn.nxtools.common'
-
 dependencies {
     //jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jacksonVersion}"
