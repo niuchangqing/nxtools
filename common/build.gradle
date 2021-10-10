@@ -1,11 +1,21 @@
-plugins {
-    id 'java'
-}
-
 dependencies {
     //jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jacksonVersion}"
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${jacksonVersion}"
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${jacksonVersion}"
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: "${jacksonVersion}"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+			artifactId = 'common'
+			from components.java
+            pom {
+				name = 'common'
+                description = 'A java development tool'
+                url = 'https://github.com/niuchangqing/nxtools/tree/master/common'
+            }
+        }
+    }
 }

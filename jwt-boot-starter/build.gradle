@@ -12,3 +12,18 @@ dependencies {
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: "${jjwtVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
 }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'jwt-boot-starter'
+            from components.java
+
+            pom {
+                name = 'jwt-boot-starter'
+                description = 'jwt security spring boot starter'
+                url = 'https://github.com/niuchangqing/nxtools/tree/master/jwt-boot-starter'
+            }
+        }
+    }
+}
