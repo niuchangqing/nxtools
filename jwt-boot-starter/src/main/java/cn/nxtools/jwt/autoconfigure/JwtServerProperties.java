@@ -42,9 +42,10 @@ public class JwtServerProperties {
 
     /**
      * 是否启用注销功能
-     * 如果为false, 在调用退出方法时,不会进行任何操作
+     * 如果为true, 在调用退出方法时,会进行保存退出数据
+     * 支持redis和内存俩种方式,有redis优先redis否则存储内存
      */
-    private Boolean enabledLogout = true;
+    private Boolean enabledLogout = false;
 
     /**
      * 是否注销全部客户端token,默认只失效当前token。
