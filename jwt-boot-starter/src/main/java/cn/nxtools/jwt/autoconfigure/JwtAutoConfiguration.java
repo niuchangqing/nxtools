@@ -3,7 +3,6 @@ package cn.nxtools.jwt.autoconfigure;
 import cn.nxtools.jwt.JwtUtil;
 import cn.nxtools.jwt.config.JwtAuthenticationEntryPoint;
 import cn.nxtools.jwt.config.JwtAuthenticationTokenFilter;
-import cn.nxtools.jwt.config.RestAuthenticationAccessDeniedHandler;
 import cn.nxtools.jwt.config.WebSecurityConfig;
 import cn.nxtools.jwt.service.CustomUserDetailService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -37,11 +36,6 @@ public class JwtAutoConfiguration {
     @Bean
     public WebSecurityConfig webSecurityConfig() {
         return new WebSecurityConfig();
-    }
-
-    @Bean
-    public RestAuthenticationAccessDeniedHandler restAuthenticationAccessDeniedHandler() {
-        return new RestAuthenticationAccessDeniedHandler();
     }
 
     @Bean

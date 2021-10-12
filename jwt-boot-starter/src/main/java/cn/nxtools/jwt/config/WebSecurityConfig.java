@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static cn.nxtools.common.StringUtil.isEmpty;
@@ -21,9 +20,6 @@ import static cn.nxtools.common.StringUtil.isEmpty;
  * @author ncq
  */
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private AccessDeniedHandler accessDeniedHandler;
 
     @Autowired
     private JwtAuthenticationEntryPoint authenticationEntryPoint;
@@ -53,8 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
         // 由于使用的是JWT，我们这里不需要csrf
         http.csrf().disable();
-        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
+        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
                 // 基于token，所以不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
