@@ -301,6 +301,7 @@ public class JwtUtil {
      */
     public JwtTokenDto generateJwtTokenDto(CustomUserDetail userDetail) {
         Preconditions.checkNotNull(userDetail, "userDetail cannot be null");
+        Preconditions.checkNotNull(userDetail.getUserId(), "userId cannot be null");
         Map<String, Object> claims = userDetailToClaims(userDetail);
         JwtTokenDto jwtTokenDto = new JwtTokenDto();
         //生成access_token
