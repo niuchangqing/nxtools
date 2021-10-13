@@ -106,4 +106,11 @@ public class CustomUserDetail implements UserDetails {
     public void setAttached(Map<String, String> attached) {
         this.attached = attached;
     }
+
+    /**
+     * 获取Long类型用户ID
+     */
+    public Long getUserIdLong() {
+        return Long.valueOf(this.userId);
+    }
 }
