@@ -28,7 +28,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             PrintWriter printWriter = response.getWriter();
-            String body = JsonUtil.toString(securityServerProperties.getAuthFailureResp());
+            String body = JsonUtil.toString(securityServerProperties.getAuthFailure());
             printWriter.write(body);
             printWriter.flush();
         }

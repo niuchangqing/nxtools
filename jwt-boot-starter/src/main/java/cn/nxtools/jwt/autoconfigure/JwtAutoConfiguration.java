@@ -1,6 +1,7 @@
 package cn.nxtools.jwt.autoconfigure;
 
 import cn.nxtools.jwt.JwtUtil;
+import cn.nxtools.jwt.config.AuthenticationAccessDeniedHandler;
 import cn.nxtools.jwt.config.JwtAuthenticationEntryPoint;
 import cn.nxtools.jwt.config.JwtAuthenticationTokenFilter;
 import cn.nxtools.jwt.config.WebSecurityConfig;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @ConditionalOnProperty(name = "nxtools.jwt.enabled", matchIfMissing = true)
 @EnableConfigurationProperties({JwtServerProperties.class, SecurityServerProperties.class})
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Import(AuthenticationAccessDeniedHandler.class)
 public class JwtAutoConfiguration {
 
 
@@ -52,5 +55,10 @@ public class JwtAutoConfiguration {
     @ConditionalOnMissingBean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationAccessDeniedHandler authenticationAccessDeniedHandler() {
+        return new AuthenticationAccessDeniedHandler();
     }
 }

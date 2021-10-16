@@ -4,6 +4,7 @@ import cn.nxtools.common.base.Splitter;
 import cn.nxtools.jwt.autoconfigure.SecurityServerProperties;
 import cn.nxtools.jwt.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static cn.nxtools.common.StringUtil.isEmpty;
@@ -38,6 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private AuthenticationAccessDeniedHandler authenticationAccessDeniedHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         if (this.extralPermitUrls == null) {
@@ -50,6 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 由于使用的是JWT，我们这里不需要csrf
         http.csrf().disable();
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
+                .exceptionHandling().accessDeniedHandler(authenticationAccessDeniedHandler).and()
                 // 基于token，所以不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()

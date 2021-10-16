@@ -19,9 +19,17 @@ public class SecurityServerProperties {
     /**
      * 认证失败响应内容
      */
-    private Map<String, String> authFailureResp = new HashMap<String, String>(){{
+    private Map<String, String> authFailure = new HashMap<String, String>(){{
         put("code", "401");
         put("message", "authentication failed");
+    }};
+
+    /**
+     * 权限不足响应内容
+     */
+    private Map<String, String> accessDenied = new HashMap<String, String>(){{
+        put("code", "403");
+        put("message", "access denied");
     }};
 
     public String getPermitUrls() {
@@ -32,11 +40,19 @@ public class SecurityServerProperties {
         this.permitUrls = permitUrls;
     }
 
-    public Map<String, String> getAuthFailureResp() {
-        return authFailureResp;
+    public Map<String, String> getAuthFailure() {
+        return authFailure;
     }
 
-    public void setAuthFailureResp(Map<String, String> authFailureResp) {
-        this.authFailureResp = authFailureResp;
+    public void setAuthFailure(Map<String, String> authFailure) {
+        this.authFailure = authFailure;
+    }
+
+    public Map<String, String> getAccessDenied() {
+        return accessDenied;
+    }
+
+    public void setAccessDenied(Map<String, String> accessDenied) {
+        this.accessDenied = accessDenied;
     }
 }
