@@ -11,10 +11,7 @@ import cn.nxtools.jwt.autoconfigure.JwtServerProperties;
 import cn.nxtools.jwt.domain.CustomUserDetail;
 import cn.nxtools.jwt.domain.JwtTokenDto;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.CompressionCodecs;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -121,6 +118,8 @@ public class JwtUtil {
                     .setSigningKey(jwtServerProperties.getSecret())
                     .parseClaimsJws(token)
                     .getBody();
+        } catch (ExpiredJwtException e) {
+            claims = e.getClaims();
         } catch (Exception e) {
             logger.log(Level.WARNING,"token to claims error", e);
         }
