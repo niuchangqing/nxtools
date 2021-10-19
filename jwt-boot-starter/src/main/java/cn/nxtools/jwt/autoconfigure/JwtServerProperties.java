@@ -18,6 +18,7 @@ public class JwtServerProperties {
     /**
      * 生成/解析Token密钥,长度要大于等于4
      */
+    //仅对称加密算法时该字段有效,非对称加密算法可以为空
     private String secret;
 
     /**

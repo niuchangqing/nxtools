@@ -8,6 +8,7 @@ import cn.nxtools.common.base.Preconditions;
 import cn.nxtools.common.collect.Lists;
 import cn.nxtools.common.collect.Maps;
 import cn.nxtools.jwt.autoconfigure.JwtServerProperties;
+import cn.nxtools.jwt.config.JwtSecretKey;
 import cn.nxtools.jwt.domain.CustomUserDetail;
 import cn.nxtools.jwt.domain.JwtTokenDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -43,6 +44,9 @@ public class JwtUtil {
 
     @Autowired
     private JwtServerProperties jwtServerProperties;
+
+    @Autowired(required = false)
+    private JwtSecretKey jwtSecretKey;
 
     public static final String REFRESH_TOKEN_PERMISSIONS = "ROLE_REFRESH_TOKEN_PERMISSIONS";
 
@@ -114,9 +118,9 @@ public class JwtUtil {
         //access_token
         Claims claims = null;
         try {
-            claims = Jwts.parser()
-                    .setSigningKey(jwtServerProperties.getSecret())
-                    .parseClaimsJws(token)
+            JwtParser parser = Jwts.parser();
+            setJwtParserSigningAlgorithm(parser);
+            claims = parser.parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
             claims = e.getClaims();
@@ -342,7 +346,19 @@ public class JwtUtil {
      */
     private String generateToken(String subject, Map<String, Object> claims, long expiration) {
         Date date = new Date();
-        String token = Jwts.builder()
+//        String token = Jwts.builder()
+//                .setClaims(claims)
+//                .setSubject(subject)
+//                //当前token唯一标记
+//                .setId(UUID.randomUUID().toString())
+//                //token生成时间
+//                .setIssuedAt(date)
+//                //过期时间
+//                .setExpiration(new Date(date.getTime() + expiration * 1000))
+//                .compressWith(CompressionCodecs.DEFLATE)
+//                .signWith(SignatureAlgorithm.forName(jwtServerProperties.getSignatureAlgorithm().name()), jwtServerProperties.getSecret())
+//                .compact();
+        JwtBuilder jwtBuilder = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 //当前token唯一标记
@@ -351,9 +367,9 @@ public class JwtUtil {
                 .setIssuedAt(date)
                 //过期时间
                 .setExpiration(new Date(date.getTime() + expiration * 1000))
-                .compressWith(CompressionCodecs.DEFLATE)
-                .signWith(SignatureAlgorithm.forName(jwtServerProperties.getSignatureAlgorithm().name()), jwtServerProperties.getSecret())
-                .compact();
+                .compressWith(CompressionCodecs.DEFLATE);
+        setJwtBuilderSignWith(jwtBuilder);
+        String token = jwtBuilder.compact();
         return token;
     }
 
@@ -430,5 +446,38 @@ public class JwtUtil {
             }
         }
 
+    }
+
+
+    /**
+     * 设置jwt解析时的算法
+     * @param jwtParser     JwtParser
+     */
+    private void setJwtParserSigningAlgorithm(JwtParser jwtParser) {
+        if (jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS256 ||
+                jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS384 ||
+                jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS512) {
+            //对称加密算法
+            jwtParser.setSigningKey(jwtServerProperties.getSecret());
+        } else {
+            //非对称加密算法
+            jwtParser.setSigningKey(jwtSecretKey.getPublicKey());
+        }
+    }
+
+    /**
+     * 设置jwt生成时JwtBuilder的signWith参数
+     * @param jwtBuilder        JwtBuilder
+     */
+    private void setJwtBuilderSignWith(JwtBuilder jwtBuilder) {
+        if (jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS256 ||
+                jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS384 ||
+                jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS512) {
+            //对称加密算法
+            jwtBuilder.signWith(SignatureAlgorithm.forName(jwtServerProperties.getSignatureAlgorithm().name()), jwtServerProperties.getSecret());
+        } else {
+            //非对称加密算法
+            jwtBuilder.signWith(SignatureAlgorithm.forName(jwtServerProperties.getSignatureAlgorithm().name()), jwtSecretKey.getPrivateKey());
+        }
     }
 }
