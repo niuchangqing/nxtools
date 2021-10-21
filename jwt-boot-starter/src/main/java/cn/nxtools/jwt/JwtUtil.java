@@ -114,14 +114,32 @@ public class JwtUtil {
         return userDetail;
     }
 
+    /**
+     * 解析token
+     */
     private Claims tokenToClaims(String token) {
         //access_token
         Claims claims = null;
         try {
             JwtParser parser = Jwts.parser();
-            setJwtParserSigningAlgorithm(parser);
-            claims = parser.parseClaimsJws(token)
-                    .getBody();
+            if (jwtServerProperties.getSignatureAlgorithm().isNone()) {
+                //无签名算法
+                claims = Jwts.parser()
+                        .parseClaimsJwt(token)
+                        .getBody();
+            } else if (jwtServerProperties.getSignatureAlgorithm().isHmac()) {
+                //secret签名
+                claims = Jwts.parser()
+                        .setSigningKey(jwtServerProperties.getSecret())
+                        .parseClaimsJws(token)
+                        .getBody();
+            } else {
+                //公私钥签名
+                claims = Jwts.parser()
+                        .setSigningKey(jwtSecretKey.getPublicKey())
+                        .parseClaimsJws(token)
+                        .getBody();
+            }
         } catch (ExpiredJwtException e) {
             claims = e.getClaims();
         } catch (Exception e) {
@@ -341,23 +359,11 @@ public class JwtUtil {
      * 生成token方法
      * @param subject           jwt subject，可以是登陆账号等
      * @param claims            jwt claims存放信息
-     * @param expiration
-     * @return
+     * @param expiration        token超时时间
+     * @return                  token字符串
      */
     private String generateToken(String subject, Map<String, Object> claims, long expiration) {
         Date date = new Date();
-//        String token = Jwts.builder()
-//                .setClaims(claims)
-//                .setSubject(subject)
-//                //当前token唯一标记
-//                .setId(UUID.randomUUID().toString())
-//                //token生成时间
-//                .setIssuedAt(date)
-//                //过期时间
-//                .setExpiration(new Date(date.getTime() + expiration * 1000))
-//                .compressWith(CompressionCodecs.DEFLATE)
-//                .signWith(SignatureAlgorithm.forName(jwtServerProperties.getSignatureAlgorithm().name()), jwtServerProperties.getSecret())
-//                .compact();
         JwtBuilder jwtBuilder = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
@@ -368,7 +374,13 @@ public class JwtUtil {
                 //过期时间
                 .setExpiration(new Date(date.getTime() + expiration * 1000))
                 .compressWith(CompressionCodecs.DEFLATE);
-        setJwtBuilderSignWith(jwtBuilder);
+        if (jwtServerProperties.getSignatureAlgorithm().isNone()) {
+            //不需要签名算法
+        } else if (jwtServerProperties.getSignatureAlgorithm().isHmac()) {
+            jwtBuilder.signWith(jwtServerProperties.getSignatureAlgorithm().getJwtSignatureAlgorithm(), jwtServerProperties.getSecret());
+        }else {
+            jwtBuilder.signWith(jwtServerProperties.getSignatureAlgorithm().getJwtSignatureAlgorithm(), jwtSecretKey.getPrivateKey());
+        }
         String token = jwtBuilder.compact();
         return token;
     }
@@ -446,38 +458,5 @@ public class JwtUtil {
             }
         }
 
-    }
-
-
-    /**
-     * 设置jwt解析时的算法
-     * @param jwtParser     JwtParser
-     */
-    private void setJwtParserSigningAlgorithm(JwtParser jwtParser) {
-        if (jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS256 ||
-                jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS384 ||
-                jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS512) {
-            //对称加密算法
-            jwtParser.setSigningKey(jwtServerProperties.getSecret());
-        } else {
-            //非对称加密算法
-            jwtParser.setSigningKey(jwtSecretKey.getPublicKey());
-        }
-    }
-
-    /**
-     * 设置jwt生成时JwtBuilder的signWith参数
-     * @param jwtBuilder        JwtBuilder
-     */
-    private void setJwtBuilderSignWith(JwtBuilder jwtBuilder) {
-        if (jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS256 ||
-                jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS384 ||
-                jwtServerProperties.getSignatureAlgorithm() == cn.nxtools.jwt.enums.SignatureAlgorithm.HS512) {
-            //对称加密算法
-            jwtBuilder.signWith(SignatureAlgorithm.forName(jwtServerProperties.getSignatureAlgorithm().name()), jwtServerProperties.getSecret());
-        } else {
-            //非对称加密算法
-            jwtBuilder.signWith(SignatureAlgorithm.forName(jwtServerProperties.getSignatureAlgorithm().name()), jwtSecretKey.getPrivateKey());
-        }
     }
 }

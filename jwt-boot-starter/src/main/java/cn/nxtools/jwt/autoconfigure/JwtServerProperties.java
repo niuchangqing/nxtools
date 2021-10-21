@@ -58,7 +58,7 @@ public class JwtServerProperties {
     /**
      * jwt token签名算法枚举
      */
-    private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.NONE;
 
     /**
      * refresh_token 权限字符串

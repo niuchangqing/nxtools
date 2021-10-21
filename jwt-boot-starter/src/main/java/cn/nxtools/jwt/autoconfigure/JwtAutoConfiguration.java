@@ -49,13 +49,15 @@ public class JwtAutoConfiguration {
     @Bean
     public JwtUtil jwtUtil() {
         //jwt配置参数校验
-        if (jwtServerProperties.getSignatureAlgorithm() == SignatureAlgorithm.HS256 ||
-            jwtServerProperties.getSignatureAlgorithm() == SignatureAlgorithm.HS384 ||
-            jwtServerProperties.getSignatureAlgorithm() == SignatureAlgorithm.HS512) {
-            Preconditions.checkState(StringUtil.isNotEmpty(jwtServerProperties.getSecret()) && jwtServerProperties.getSecret().length() >= 4,"对称加密算法情况下,需配置[nxtools.jwt.secret]不能为空或长度小于4");
+        if (jwtServerProperties.getSignatureAlgorithm().isHmac()) {
+            //校验secret字符串是否为空或长度小于4
+            boolean flag = StringUtil.isNotEmpty(jwtServerProperties.getSecret()) && jwtServerProperties.getSecret().length() >= 4;
+            Preconditions.checkState(flag ,String.format("使用%s签名,需配置[nxtools.jwt.secret]不能为空或长度小于4", jwtServerProperties.getSignatureAlgorithm()));
+        } else if (jwtServerProperties.getSignatureAlgorithm().isNone()) {
+            //无需校验
         } else {
-            //非对称加密
-            Preconditions.checkState(jwtSecretKey != null, "非对称加密算法情况,需配置共私钥。实现JwtSecretKey并注入容器中");
+            //使用公私钥签名,需要初始化公私钥配置
+            Preconditions.checkState(jwtSecretKey != null, String.format("使用%s签名,需配置公私钥。实现JwtSecretKey接口并注入容器中", jwtServerProperties.getSignatureAlgorithm()));
         }
         return new JwtUtil();
     }

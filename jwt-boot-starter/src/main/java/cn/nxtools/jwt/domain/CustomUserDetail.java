@@ -109,6 +109,7 @@ public class CustomUserDetail implements UserDetails {
 
     /**
      * 获取Long类型用户ID
+     * @return      Long类型用户ID
      */
     public Long getUserIdLong() {
         return Long.valueOf(this.userId);
