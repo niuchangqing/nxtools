@@ -1,6 +1,5 @@
 package cn.nxtools.jwt.autoconfigure;
 
-import cn.nxtools.common.collect.Maps;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashMap;

@@ -4,7 +4,6 @@ import cn.nxtools.common.StringUtil;
 import cn.nxtools.common.base.Preconditions;
 import cn.nxtools.jwt.JwtUtil;
 import cn.nxtools.jwt.config.*;
-import cn.nxtools.jwt.enums.SignatureAlgorithm;
 import cn.nxtools.jwt.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
