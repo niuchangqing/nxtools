@@ -31,6 +31,12 @@ public class DateUtil {
 
     public static final String YYYY_MM_DD_FORMAT = "yyyy/MM/dd";
 
+    public static final String YYYYMMDD = "yyyyMMdd";
+
+    public static final String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
+
+    public static final String YYYYMMDDHHMMSSSSS = "yyyyMMddHHmmssSSS";
+
     /**
      * 日期时间转字符串,默认yyyy-MM-dd HH:mm:ss格式
      * @param date              日期

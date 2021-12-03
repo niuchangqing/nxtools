@@ -1,9 +1,6 @@
 package cn.nxtools.common;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -57,7 +54,25 @@ public class LocalDateTimeUtil {
      * yyyy/MM/dd HH:mm:ss.SSS
      * 2021/03/18 21:36:28.760
      */
-    private static final DateTimeFormatter YYYY_MM_DD_HH_MM_SS_SSS_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
+    public static final DateTimeFormatter YYYY_MM_DD_HH_MM_SS_SSS_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
+
+    /**
+     * yyyyMMdd
+     * 20211202
+     */
+    public static final DateTimeFormatter YYYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+    /**
+     * yyyyMMddHHmmss
+     * 20211202132330
+     */
+    public static final DateTimeFormatter YYYYMMDDHHMMSS = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+    /**
+     * yyyyMMddHHmmssSSS
+     * 20211202132330739
+     */
+    public static final DateTimeFormatter YYYYMMDDHHMMSSSSS = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
     private LocalDateTimeUtil() {}
 
@@ -273,5 +288,28 @@ public class LocalDateTimeUtil {
         }
         checkNotNull(zoneId);
         return LocalDateTime.ofInstant(date.toInstant(), zoneId);
+    }
+
+    /**
+     * LocalDateTime转毫秒时间戳
+     * 默认为当前系统时区
+     * @param localDateTime     LocalDateTime,不能为空
+     * @return                  毫秒时间戳
+     */
+    public static long toMillis(final LocalDateTime localDateTime) {
+        return toMillis(localDateTime, null);
+    }
+
+    /**
+     * LocalDateTime转毫秒时间戳
+     * 指定LocalDateTime时区
+     * @param localDateTime     LocalDateTime,不能为空
+     * @param zoneId            时区,为空默认为当前时区
+     * @return                  毫秒时间戳
+     */
+    public static long toMillis(final LocalDateTime localDateTime, ZoneId zoneId) {
+        checkNotNull(localDateTime);
+        zoneId = zoneId == null ? ZoneOffset.systemDefault() : zoneId;
+        return localDateTime.atZone(zoneId).toInstant().toEpochMilli();
     }
 }
