@@ -57,7 +57,7 @@ public class DateUtil {
         if (isNull(localDateTime)) {
             return null;
         }
-        return cn.nxtools.common.LocalDateTimeUtil.toString(localDateTime, format);
+        return LocalDateTimeUtil.toString(localDateTime, format);
     }
 
     /**
@@ -71,8 +71,8 @@ public class DateUtil {
             return null;
         }
         checkNotNull(format);
-        LocalDateTime localDateTime = cn.nxtools.common.LocalDateTimeUtil.ofString(dateStr, format);
-        Date date = cn.nxtools.common.LocalDateTimeUtil.toDate(localDateTime);
+        LocalDateTime localDateTime = LocalDateTimeUtil.ofString(dateStr, format);
+        Date date = LocalDateTimeUtil.toDate(localDateTime);
         return date;
     }
 
@@ -191,5 +191,25 @@ public class DateUtil {
         final Calendar c = Calendar.getInstance(timeZone);
         c.setTime(date);
         return c;
+    }
+
+    /**
+     * 获取指定天的开始时间, 如: 2021-12-07 00:00:00.000
+     * @param date                  日期
+     * @return                      指定日期的一天开始时间
+     */
+    public static Date beginOfDay(final Date date) {
+        LocalDateTime dateTime = LocalDateTimeUtil.beginOfDay(ofDate(date));
+        return LocalDateTimeUtil.toDate(dateTime);
+    }
+
+    /**
+     * 获取指定天的结束时间, 如: 2021-12-07 23:59:59.999
+     * @param date                  日期
+     * @return                      指定日期的一天结束时间
+     */
+    public static Date endOfDay(final Date date) {
+        LocalDateTime dateTime = LocalDateTimeUtil.endOfDay(ofDate(date));
+        return LocalDateTimeUtil.toDate(dateTime);
     }
 }

@@ -35,8 +35,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String authToken = request.getHeader(jwtServerProperties.getHeader());
         String token = null;
         if (StringUtil.isNotEmpty(authToken)) {
-            if (StringUtil.isNotEmpty(jwtServerProperties.getTokenStart()) && authToken.startsWith(jwtServerProperties.getTokenStart())) {
-                token = authToken.substring(jwtServerProperties.getTokenStart().length());
+            if (StringUtil.isNotNull(jwtServerProperties.getTokenPrefix()) && authToken.startsWith(jwtServerProperties.getTokenPrefix())) {
+                token = authToken.replaceFirst(jwtServerProperties.getTokenPrefix(), StringUtil.EMPTY);
             }else {
                 //无特定前缀token
                 token = authToken;

@@ -312,4 +312,48 @@ public class LocalDateTimeUtil {
         zoneId = zoneId == null ? ZoneOffset.systemDefault() : zoneId;
         return localDateTime.atZone(zoneId).toInstant().toEpochMilli();
     }
+
+    /**
+     * LocalDateTime转秒时间戳
+     * @param localDateTime     LocalDateTime,不能为空
+     * @return                  秒时间戳
+     */
+    public static long toSecond(final LocalDateTime localDateTime) {
+        return toMillis(localDateTime) / 1000;
+    }
+
+    /**
+     * LocalDateTime转秒时间戳
+     * 指定LocalDateTime时区
+     * @param localDateTime     LocalDateTime,不能为空
+     * @param zoneId            时区,为空默认为当前时区
+     * @return                  毫秒时间戳
+     */
+    public static long toSecond(final LocalDateTime localDateTime, ZoneId zoneId) {
+        return toMillis(localDateTime, zoneId) / 1000;
+    }
+
+    /**
+     * 修改为一天的开始时间, 如: 2021-12-07 00:00:00.000
+     * @param localDateTime     指定日期
+     * @return                  指定日期的一天开始时间
+     */
+    public static LocalDateTime beginOfDay(final LocalDateTime localDateTime) {
+        if (isNull(localDateTime)) {
+            return null;
+        }
+        return localDateTime.with(LocalTime.MIN);
+    }
+
+    /**
+     * 修改为一天的结束时间, 如: 2021-12-07 23:59:59.999
+     * @param localDateTime     指定日期
+     * @return                  指定日期的一天结束时间
+     */
+    public static LocalDateTime endOfDay(final LocalDateTime localDateTime) {
+        if (isNull(localDateTime)) {
+            return null;
+        }
+        return localDateTime.with(LocalTime.MAX);
+    }
 }

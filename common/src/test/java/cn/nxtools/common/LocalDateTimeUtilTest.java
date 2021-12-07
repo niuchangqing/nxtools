@@ -120,4 +120,22 @@ public class LocalDateTimeUtilTest {
 
         public LocalTime localTime;
     }
+
+    @Test
+    public void testToMillis() {
+        long l = LocalDateTimeUtil.toMillis(LocalDateTime.now());
+        System.out.println(l);
+    }
+
+    @Test
+    public void testBeginOfDay() {
+        LocalDateTime localDateTime = LocalDateTimeUtil.beginOfDay(LocalDateTime.now());
+        System.out.println(LocalDateTimeUtil.toString(localDateTime, LocalDateTimeUtil.YYYY_MM_DD_HH_MM_SS_SSS));
+    }
+
+    @Test
+    public void testEndOfDay() {
+        LocalDateTime localDateTime = LocalDateTimeUtil.endOfDay(LocalDateTime.now());
+        System.out.println(LocalDateTimeUtil.toString(localDateTime, LocalDateTimeUtil.YYYY_MM_DD_HH_MM_SS_SSS));
+    }
 }

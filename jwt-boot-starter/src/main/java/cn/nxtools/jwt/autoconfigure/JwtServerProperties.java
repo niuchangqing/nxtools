@@ -37,9 +37,9 @@ public class JwtServerProperties {
     private String header = "Authorization";
 
     /**
-     * token值开头字符串
+     * token值固定前缀
      */
-    private String tokenStart = "Bearer ";
+    private String tokenPrefix;
 
     /**
      * 是否启用注销功能
@@ -52,6 +52,7 @@ public class JwtServerProperties {
      * 是否注销全部客户端token,默认只失效当前token。
      * enabledLogout=true时,该字段才会生效
      * 为true时,一个客户端退出登陆,所有客户端的token都将失效
+     * 支持redis和内存俩种方式,有redis优先redis否则存储内存
      */
     private Boolean logoutAllClients = false;
 
@@ -63,6 +64,7 @@ public class JwtServerProperties {
     /**
      * refresh_token 权限字符串
      * 限制refresh_token的权限，使refresh_token只能用来重置access_token
+     * @PreAuthorize("hasAnyRole('ROLE_REFRESH_TOKEN_PERMISSIONS')")
      */
     private String refreshTokenPermissions = JwtUtil.REFRESH_TOKEN_PERMISSIONS;
 
@@ -106,12 +108,12 @@ public class JwtServerProperties {
         this.enabled = enabled;
     }
 
-    public String getTokenStart() {
-        return tokenStart;
+    public String getTokenPrefix() {
+        return tokenPrefix;
     }
 
-    public void setTokenStart(String tokenStart) {
-        this.tokenStart = tokenStart;
+    public void setTokenPrefix(String tokenPrefix) {
+        this.tokenPrefix = tokenPrefix;
     }
 
     public Boolean getEnabledLogout() {

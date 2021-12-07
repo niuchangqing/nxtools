@@ -1,7 +1,7 @@
 package cn.nxtools.common;
 
-import org.junit.Test;
 import cn.nxtools.common.base.Stopwatch;
+import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -84,5 +84,17 @@ public final class DateUtilTest {
         Date date = DateUtil.of("2021-02-28 23:59:30.100", DateUtil.YYYY_MM_DD_HH_MM_SS_SSS);
         Date date1 = DateUtil.addMilliseconds(date, 200);
         System.out.println(DateUtil.toString(date1, DateUtil.YYYY_MM_DD_HH_MM_SS_SSS));
+    }
+
+    @Test
+    public void beginOfDay() {
+        Date date = DateUtil.beginOfDay(new Date());
+        System.out.println(DateUtil.toString(date, DateUtil.YYYY_MM_DD_HH_MM_SS_SSS));
+    }
+
+    @Test
+    public void endOfDay() {
+        Date date = DateUtil.endOfDay(new Date());
+        System.out.println(DateUtil.toString(date, DateUtil.YYYY_MM_DD_HH_MM_SS_SSS));
     }
 }
