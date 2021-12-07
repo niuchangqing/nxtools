@@ -9,7 +9,7 @@
 ```
 ### Gradle
 ```groovy
-implementation 'cn.nxtools:jwt-boot-starter:1.0.0'
+implementation 'cn.nxtools:jwt-boot-starter:1.0.1'
 ```
 
 ## 配置参数
