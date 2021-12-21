@@ -10,7 +10,7 @@ public class ArrayUtil {
      * null = true
      * [] = false
      * ["a"] = false
-     * </p>
+     * </pre>
      * @param array             array参数
      * @param <T>               数组元素类型
      * @return                  null=true, 其他为false

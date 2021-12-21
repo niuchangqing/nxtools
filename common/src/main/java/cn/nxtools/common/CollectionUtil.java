@@ -17,8 +17,8 @@ public class CollectionUtil {
     /**
      * 判断集合是否为null
      * <p>
-     *     null = true;
-     *     [] = false;
+     *     null = true;<br>
+     *     [] = false;<br>
      * </p>
      * @param collection        集合参数
      * @return                  返回true或者false
@@ -30,8 +30,8 @@ public class CollectionUtil {
     /**
      * 判断集合是否不为null
      * <p>
-     *     null = false;
-     *     [] = true;
+     *     null = false;<br>
+     *     [] = true;<br>
      * </p>
      * @param collection        集合参数
      * @return                  返回true或者false
@@ -43,8 +43,8 @@ public class CollectionUtil {
     /**
      * 判断集合是否为null或者[]
      * <p>
-     *     null = true;
-     *     [] = true;
+     *     null = true;<br>
+     *     [] = true;<br>
      * </p>
      * @param collection        集合参数
      * @return                  返回true或者false
@@ -56,8 +56,8 @@ public class CollectionUtil {
     /**
      * 判断集合不是null和[]
      * <p>
-     *     null = false;
-     *     [] = false;
+     *     null = false;<br>
+     *     [] = false;<br>
      * </p>
      * @param collection        集合参数
      * @return                  返回true或者false
@@ -69,8 +69,8 @@ public class CollectionUtil {
     /**
      * 判断map是否为null
      * <p>
-     *     null = true;
-     *     {} = false;
+     *     null = true;<br>
+     *     {} = false;<br>
      * </p>
      * @param map               map参数
      * @return                  返回true或者false
@@ -82,8 +82,8 @@ public class CollectionUtil {
     /**
      * 判断map是否不为null
      * <p>
-     *     null = false;
-     *     {} = true;
+     *     null = false;<br>
+     *     {} = true;<br>
      * </p>
      * @param map               map参数
      * @return                  返回true或者false
@@ -95,8 +95,8 @@ public class CollectionUtil {
     /**
      * 判断map是否为null或{}
      * <p>
-     *     null = true;
-     *     {} = true;
+     *     null = true;<br>
+     *     {} = true;<br>
      *     {"name":"zhang"} = false;
      * </p>
      * @param map               map参数
@@ -109,8 +109,8 @@ public class CollectionUtil {
     /**
      * 判断map是否不为null和{}
      * <p>
-     *     null = false;
-     *     {} = false;
+     *     null = false;<br>
+     *     {} = false;<br>
      *     {"name":"zhang"} = true;
      * </p>
      * @param map               map参数

@@ -54,4 +54,54 @@ public final class StringUtilTest {
         System.out.println(CollectionUtil.isNotEmpty(map));
         System.out.println("---------------------");
     }
+
+
+    @Test
+    public void testFormat() {
+        String template = "iwoahut{}jowiajra{}}jjnja{}";
+        System.out.println(StringUtil.format(template, "{}", "张张","111", "222", "333", "444"));
+        //iwoahut张张jowiajra111}jjnja222 [333, 444]
+    }
+
+    @Test
+    public void testLeftAppendChar() {
+        String str = "100";
+        System.out.println(StringUtil.leftAppend(str, 10, '0'));
+        System.out.println(StringUtil.leftAppend(null, 5, 'a'));// = null;
+        System.out.println(StringUtil.leftAppend("bc", -1, 'a'));//= "bc";
+        System.out.println(StringUtil.leftAppend("bc", 5, 'a'));// = "aaabc";
+        System.out.println(StringUtil.leftAppend("bc", 2, 'a'));// = "bc";
+    }
+
+    @Test
+    public void testLeftAppendStr() {
+        String str = "100";
+        System.out.println(StringUtil.leftAppend(str, 10, "100"));//1001001100
+        System.out.println(StringUtil.leftAppend(null, 5, "0"));//null
+        System.out.println(StringUtil.leftAppend("bc", -1, "aa"));//bc
+        System.out.println(StringUtil.leftAppend("bc", 5, "aa"));//aaabc
+        System.out.println(StringUtil.leftAppend("bc", 2, "aa"));//bc
+        System.out.println(StringUtil.leftAppend("bc", 5, ""));//bc
+    }
+
+    @Test
+    public void testRightAppendChar() {
+        String str = "100";
+        System.out.println(StringUtil.rightAppend(str, 10, '0'));//1000000000
+        System.out.println(StringUtil.rightAppend(null, 5, 'a'));// = null;
+        System.out.println(StringUtil.rightAppend("bc", -1, 'a'));//= "bc";
+        System.out.println(StringUtil.rightAppend("bc", 5, 'a'));// = "bcaaa";
+        System.out.println(StringUtil.rightAppend("bc", 2, 'a'));// = "bc";
+    }
+
+    @Test
+    public void testRightAppendStr() {
+        String str = "100";
+        System.out.println(StringUtil.rightAppend(str, 10, "100"));//1001001001
+        System.out.println(StringUtil.rightAppend(null, 5, "0"));//null
+        System.out.println(StringUtil.rightAppend("bc", -1, "aa"));//bc
+        System.out.println(StringUtil.rightAppend("bc", 5, "aa"));//bcaaa
+        System.out.println(StringUtil.rightAppend("bc", 2, "aa"));//bc
+        System.out.println(StringUtil.rightAppend("bc", 5, ""));//bc
+    }
 }

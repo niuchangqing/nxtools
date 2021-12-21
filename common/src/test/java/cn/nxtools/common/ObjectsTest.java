@@ -11,7 +11,7 @@ public final class ObjectsTest {
     @Test
     public void testIsNullOrDefault() {
         String a = null;
-        String a1 = Objects.getOrDefault(a, "默认值");
+        String a1 = Objects.defaultIfNull(a, "默认值");
         System.out.println(a1);
     }
 }

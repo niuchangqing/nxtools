@@ -31,11 +31,7 @@ public final class Objects {
      * @param <T>           T
      * @return              返回obj or defaultObj
      */
-    public static <T> T getOrDefault(T obj, T nullValue) {
-        if (isNull(obj)) {
-            return nullValue;
-        } else {
-            return obj;
-        }
+    public static <T> T defaultIfNull(T obj, T nullValue) {
+        return obj == null ? nullValue : obj;
     }
 }
