@@ -2,10 +2,7 @@ package cn.nxtools.common;
 
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public final class IOUtilTest {
 
@@ -28,5 +25,19 @@ public final class IOUtilTest {
 
         byte[] bytes1 = IOUtil.toByteArray(reader);
         System.out.println(new String(bytes1));
+    }
+
+    @Test
+    public void testCopy() throws IOException {
+        File file = new File("/Users/xuweihong/logs/raw.jpeg");
+        byte[] bytes = FileUtil.readFileToByteArray(file);
+        InputStream in = new ByteArrayInputStream(bytes);
+
+        byte[] bytes1 = new byte[bytes.length];
+        OutputStream out = new ByteArrayOutputStream(bytes.length);
+        IOUtil.copy(in, out, 100);
+        out.write(bytes1);
+        System.out.println(bytes1.length == bytes.length);
+        //true
     }
 }
