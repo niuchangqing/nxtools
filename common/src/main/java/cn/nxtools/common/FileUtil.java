@@ -5,6 +5,7 @@ import cn.nxtools.common.exception.IORuntimeException;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
+import java.nio.file.Path;
 import java.util.Collection;
 
 import static cn.nxtools.common.IOUtil.closeQuietly;
@@ -30,7 +31,7 @@ public class FileUtil {
     /**
      * 复制文件的buffer大小
      */
-    private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
+    public static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
 
     /**
      * 1GB
@@ -263,82 +264,6 @@ public class FileUtil {
         doCopyDirectory(source, target);
     }
 
-
-    /**
-     * 复制文件
-     * 文件复制使用Java NIO中的FileChannel方式
-     * @param source            源文件
-     * @param target            目标文件
-     * @throws FileException,IORuntimeException    target存在时无写入权限,IOException,复制后的文件大小和原文件不一致
-     */
-    private static void doCopyFile(File source, File target) {
-        if (target.exists() && !target.canWrite()) {
-            //文件存在，但是无法写入
-            throw new FileException("Target " + target + " exist but cannot be written to");
-        }
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-        FileChannel inChannel = null;
-        FileChannel outChannel = null;
-        try {
-            fis = new FileInputStream(source);
-            fos = new FileOutputStream(target);
-            inChannel = fis.getChannel();
-            outChannel = fos.getChannel();
-            long size = inChannel.size();
-            long pos = 0;
-            long count = 0;
-            while (pos < size) {
-                count = size - pos > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : size - pos;
-                pos += outChannel.transferFrom(inChannel, pos, count);
-            }
-        }catch (IOException e) {
-            throw new IORuntimeException(e);
-        }finally {
-            closeQuietly(fis, fos, inChannel, outChannel);
-        }
-        if (source.length() != target.length()) {
-            throw new FileException("Failed to copy full contents from " + source + " to " + target);
-        }
-    }
-
-    /**
-     * 复制文件夹
-     * @param source            源文件夹
-     * @param target            目标文件夹
-     * @throws FileException    target存在但不是目录,无创建/写入权限
-     */
-    private static void doCopyDirectory(File source, File target) {
-        File[] files = source.listFiles();
-        if (files == null) {
-            //目录下没有文件
-            return;
-        }
-        if (target.exists()) {
-            if (!target.isDirectory()) {
-                //目标文件已存在，但不是文件夹
-                throw new FileException("Target " + target + " exist but is not a directory");
-            }
-        }else {
-            if (!target.mkdirs() && !target.isDirectory()) {
-                //无法创建目录
-                throw new FileException("Target " + target + " directory cannot be created");
-            }
-        }
-        //判断是否有写入权限
-        if (!target.canWrite()) {
-            throw new FileException("Target " + target + " cannot be written to");
-        }
-        for (File file : files) {
-            File tgtFile = new File(target, file.getName());
-            if (file.isDirectory()) {
-                doCopyDirectory(file, tgtFile);
-            }else {
-                doCopyFile(file, tgtFile);
-            }
-        }
-    }
-
     /**
      * 删除文件
      * 即可以删除文件也可以删除文件夹
@@ -400,16 +325,12 @@ public class FileUtil {
      * @param file1                第一个文件
      * @param file2                第二个文件
      * @return                     ture=一样,false=不一样
-     * @throws FileException        FileException
+     * @throws FileException       IO异常
      */
     public static boolean equalsCanonicalPath(File file1, File file2) {
         checkNotNull(file1, "file1 must not be null");
         checkNotNull(file2, "file2 must not be null");
-        try {
-            return file1.getCanonicalPath().equals(file2.getCanonicalPath());
-        }catch (IOException e) {
-            throw new IORuntimeException(e);
-        }
+        return getCanonicalPath(file1).equals(getCanonicalPath(file2));
     }
 
     /**
@@ -722,4 +643,124 @@ public class FileUtil {
             closeQuietly(in);
         }
     }
+
+    /**
+     * 返回文件的唯一绝对路径
+     * @param file                      被获取路径的文件
+     * @return                          文件的唯一绝对路径
+     * @throws IORuntimeException       IO异常
+     * @since 1.0.2
+     */
+    public static String getCanonicalPath(File file) {
+        try {
+            return file.getCanonicalPath();
+        } catch (Exception e) {
+            throw new IORuntimeException(e);
+        }
+    }
+
+    /**
+     * 读取文件为InputStream
+     * @param file                      被读取文件
+     * @return                          {@link InputStream}
+     * @since 1.0.2
+     */
+    public static InputStream readFileToInputStream(File file) {
+        FileInputStream in = openInputStream(file);
+        return in;
+    }
+
+    /**
+     * 判断sub文件是不是parent的子目录
+     * @param parent                    父目录
+     * @param sub                       子目录
+     * @return                          true=sub是parent的子目录, false=不是
+     */
+    public static boolean isSub(File parent, File sub) {
+        checkNotNull(parent, "Parent File must be not null");
+        checkNotNull(sub, "Sub File must be not null");
+        return isSub(parent.toPath(), sub.toPath());
+    }
+
+    /**
+     * 判断sub path是不是parent的子path
+     * @param parent                    父path
+     * @param sub                       子path
+     * @return                          true=sub是parent的子目录, false=不是
+     */
+    public static boolean isSub(Path parent, Path sub) {
+        return sub.toAbsolutePath().normalize().startsWith(parent.toAbsolutePath().normalize());
+    }
+
+
+
+    /**
+     * 复制文件
+     * 文件复制使用Java NIO中的FileChannel方式
+     * @param source            源文件
+     * @param target            目标文件
+     * @throws FileException,IORuntimeException    target存在时无写入权限,IOException,复制后的文件大小和原文件不一致
+     */
+    private static void doCopyFile(File source, File target) {
+        if (target.exists() && !target.canWrite()) {
+            //文件存在，但是无法写入
+            throw new FileException("Target " + target + " exist but cannot be written to");
+        }
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            fis = new FileInputStream(source);
+            fos = new FileOutputStream(target);
+            IOUtil.copy(fis, fos);
+        }catch (IOException e) {
+            throw new IORuntimeException(e);
+        }finally {
+            closeQuietly(fis, fos);
+        }
+        if (source.length() != target.length()) {
+            throw new FileException("Failed to copy full contents from " + source + " to " + target);
+        }
+    }
+
+
+
+    // -------------------------------------------------------------------------- private method start
+    /**
+     * 复制文件夹
+     * @param source            源文件夹
+     * @param target            目标文件夹
+     * @throws FileException    target存在但不是目录,无创建/写入权限
+     */
+    private static void doCopyDirectory(File source, File target) {
+        File[] files = source.listFiles();
+        if (files == null) {
+            //目录下没有文件
+            return;
+        }
+        if (target.exists()) {
+            if (!target.isDirectory()) {
+                //目标文件已存在，但不是文件夹
+                throw new FileException("Target " + target + " exist but is not a directory");
+            }
+        }else {
+            if (!target.mkdirs() && !target.isDirectory()) {
+                //无法创建目录
+                throw new FileException("Target " + target + " directory cannot be created");
+            }
+        }
+        //判断是否有写入权限
+        if (!target.canWrite()) {
+            throw new FileException("Target " + target + " cannot be written to");
+        }
+        for (File file : files) {
+            File tgtFile = new File(target, file.getName());
+            if (file.isDirectory()) {
+                doCopyDirectory(file, tgtFile);
+            }else {
+                doCopyFile(file, tgtFile);
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------- private method end
 }

@@ -1,10 +1,12 @@
 package cn.nxtools.common;
 
+import cn.nxtools.common.base.Preconditions;
 import cn.nxtools.common.exception.IORuntimeException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
+import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +34,7 @@ public class IOUtil {
     /**
      * 默认buffer size大小
      */
-    private static final int DEFAULT_BUFFER_SIZE = 8192;
+    public static final int DEFAULT_BUFFER_SIZE = 8192;
 
     /**
      * 获取当前系统换行符
@@ -61,7 +63,7 @@ public class IOUtil {
         }
     }
 
-    /**
+    /**Quietly
      * 批量关闭
      * 不抛出异常
      * @param closeables           要关闭的数组
@@ -255,6 +257,136 @@ public class IOUtil {
     }
 
     /**
+     * copy文件流,使用NIO
+     * 不关闭FileInputStream和FileOutputStream
+     * @param in                    输入流
+     * @param out                   输出流
+     * @return                      copy的字节数
+     * @since 1.0.2
+     */
+    public static long copy(FileInputStream in, FileOutputStream out) {
+        Preconditions.checkNotNull(in, "FileInputStream cannot be null");
+        Preconditions.checkNotNull(out, "FileOutputStream cannot be null");
+        FileChannel inChannel = null;
+        FileChannel outChannel = null;
+        try {
+            inChannel = in.getChannel();
+            outChannel = out.getChannel();
+            return copy(inChannel, outChannel);
+        } finally {
+            closeQuietly(inChannel, outChannel);
+        }
+    }
+
+    /**
+     * InputStream copy到OutputStream
+     * @param in                        {@link InputStream}
+     * @param out                       {@link OutputStream}
+     * @return                          copy字节数
+     * @throws IORuntimeException       IO异常
+     * @since 1.0.2
+     */
+    public static long copy(InputStream in, OutputStream out) {
+        return copy(in, out, DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * InputStream copy到OutputStream
+     * @param in                        {@link InputStream}
+     * @param out                       {@link OutputStream}
+     * @param bufferSize                缓存大小,bufferSize小于等于0为默认值{@link #DEFAULT_BUFFER_SIZE}
+     * @return                          copy字节数
+     * @throws IORuntimeException       IO异常
+     * @since 1.0.2
+     */
+    public static long copy(InputStream in, OutputStream out, int bufferSize) {
+        checkNotNull(in, "InputStream cannot be null");
+        checkNotNull(out, "OutputStream cannot be null");
+        bufferSize = bufferSize <= 0 ? DEFAULT_BUFFER_SIZE : bufferSize;
+        try {
+            long count = 0;
+            int n;
+            byte[] buffer = new byte[bufferSize];
+            while (-1 != (n = in.read(buffer))) {
+                out.write(buffer, 0, n);
+                count += n;
+            }
+            return count;
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
+        }
+    }
+
+    /**
+     * copy文件流,使用NIO
+     * 不关闭FileInputStream和FileOutputStream
+     * @param in                    输入流
+     * @param out                   输出流
+     * @param bufferSize            缓存大小
+     * @return                      copy的字节数
+     * @since 1.0.2
+     */
+    public static long copy(FileInputStream in, FileOutputStream out, int bufferSize) {
+        Preconditions.checkNotNull(in, "FileInputStream cannot be null");
+        Preconditions.checkNotNull(out, "FileOutputStream cannot be null");
+        FileChannel inChannel = null;
+        FileChannel outChannel = null;
+        try {
+            inChannel = in.getChannel();
+            outChannel = out.getChannel();
+            return copy(inChannel, outChannel, bufferSize);
+        } finally {
+            closeQuietly(inChannel, outChannel);
+        }
+    }
+
+    /**
+     * copy文件channel,使用NIO, copy后不关闭channel
+     * @param inChannel                 输入{@link FileChannel}
+     * @param outChannel                输出{@link FileChannel}
+     * @param bufferSize                缓存大小
+     * @return                          copy的字节数
+     * @throws IORuntimeException       IO异常
+     * @since 1.0.2
+     */
+    public static long copy(FileChannel inChannel, FileChannel outChannel, int bufferSize) {
+        Preconditions.checkNotNull(inChannel, "FileChannel in cannot be null");
+        Preconditions.checkNotNull(outChannel, "FileChannel out cannot be null");
+        //bufferSize小于0使用默认
+        bufferSize = bufferSize < 0 ? DEFAULT_BUFFER_SIZE : bufferSize;
+        try {
+            long size = inChannel.size();
+            long pos = 0;
+            long count = 0;
+            while (pos < size) {
+                count = size - pos > bufferSize ? bufferSize : size - pos;
+                pos += outChannel.transferFrom(inChannel, pos, count);
+            }
+            return pos;
+        } catch (Exception e) {
+            throw new IORuntimeException(e);
+        }
+    }
+
+    /**
+     * copy文件channel,使用NIO, copy后不关闭channel
+     * @param inChannel                 输入{@link FileChannel}
+     * @param outChannel                输出{@link FileChannel}
+     * @return                          copy的字节数
+     * @throws IORuntimeException       IO异常
+     * @since 1.0.2
+     */
+    public static long copy(FileChannel inChannel, FileChannel outChannel) {
+        Preconditions.checkNotNull(inChannel, "FileChannel in cannot be null");
+        Preconditions.checkNotNull(outChannel, "FileChannel out cannot be null");
+        try {
+            return inChannel.transferTo(0, inChannel.size(), outChannel);
+        } catch (Exception e) {
+            throw new IORuntimeException(e);
+        }
+    }
+
+    /**
      * 写入字符串
      * @param data                  指定字符串
      * @param output                OutputStream
@@ -402,5 +534,21 @@ public class IOUtil {
      */
     public static String toString(InputStream inputStream) {
         return toString(inputStream, null);
+    }
+
+    /**
+     * 从缓存中刷出数据
+     * 不抛出异常
+     * @param flushable                 {@link Flushable}
+     * @since 1.0.2
+     */
+    public static void flushQuietly(Flushable flushable) {
+        if (nonNull(flushable)) {
+            try {
+                flushable.flush();
+            } catch (IOException e) {
+
+            }
+        }
     }
 }

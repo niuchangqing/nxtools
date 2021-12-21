@@ -28,7 +28,7 @@ public final class FileUtilTest {
 
     @Test
     public void testMoveFileToDirectory() {
-        File source = new File("/Users/xuweihong/logs/raw.jpg");
+        File source = new File("/Users/xuweihong/logs/raw.jpeg");
         File target = new File("/Users/xuweihong/logs/raw_copy");
         Stopwatch stopwatch = Stopwatch.createStarted();
         FileUtil.moveFileToDirectory(source, target);
@@ -59,7 +59,7 @@ public final class FileUtilTest {
     @Test
     public void testCopyFile() {
         Stopwatch stopwatch = Stopwatch.createStarted();
-        FileUtil.copyFile(new File("/Users/xuweihong/logs/raw.jpg"), new File("/Users/xuweihong/logs1/raw.jpg"));
+        FileUtil.copyFile(new File("/Users/xuweihong/logs/raw.jpeg"), new File("/Users/xuweihong/logs/log1/raw.jpeg"));
         stopwatch.stop();
         System.out.println(stopwatch.toString());
     }
@@ -147,5 +147,10 @@ public final class FileUtilTest {
         File file = new File("/Users/xuweihong/logs/test.txt");
         String str = FileUtil.readFileToString(file);
         System.out.println(str);
+    }
+
+    @Test
+    public void testOpenOutputStream() {
+        FileUtil.openOutputStream(new File("/Users/xuweihong/logs/test.txt"), false);
     }
 }
