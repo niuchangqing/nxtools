@@ -4,12 +4,12 @@
 <dependency>
     <groupId>cn.nxtools</groupId>
     <artifactId>jwt-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 ### Gradle
 ```groovy
-implementation 'cn.nxtools:jwt-boot-starter:1.0.1'
+implementation 'cn.nxtools:jwt-boot-starter:1.0.2'
 ```
 
 ## 配置参数
