@@ -6,6 +6,7 @@ import cn.nxtools.common.collect.Maps;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -27,7 +28,7 @@ public final class MapsTest {
         HashMap<String, String> map = Maps.newHashMap();
         map.put("1","1");
         map.put("2","2");
-        ConcurrentMap<String, String> concurrentMap = Maps.newConcurrentMap(map);
+        ConcurrentHashMap<String, String> concurrentMap = Maps.newConcurrentHashMap(map);
         System.out.println(JsonUtil.toString(concurrentMap));
     }
 }

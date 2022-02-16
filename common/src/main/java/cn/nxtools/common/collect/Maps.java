@@ -2,7 +2,7 @@ package cn.nxtools.common.collect;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static cn.nxtools.common.base.Preconditions.checkNotNull;
 
@@ -82,35 +82,35 @@ public final class Maps {
     }
 
     /**
-     * 创建ConcurrentMap
+     * 创建ConcurrentHashMap
      * @param <V>               V
      * @param <K>               K
-     * @return                  a empty ConcurrentMap
+     * @return                  a empty ConcurrentHashMap
      */
-    public static <K, V> ConcurrentMap<K, V> newConcurrentMap() {
+    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
         return new ConcurrentHashMap();
     }
 
     /**
-     * 创建ConcurrentMap,并初始化数据
-     * 可用于HashMap,LinkedHashMap等map转创建ConcurrentMap
+     * 创建ConcurrentHashMap,并初始化数据
+     * 可用于HashMap,LinkedHashMap等map转创建ConcurrentHashMap
      * @param map                       map参数
      * @param <K>                       K
      * @param <V>                       V
-     * @return                          a ConcurrentMap
+     * @return                          a ConcurrentHashMap
      */
-    public static <K, V> ConcurrentMap<K, V> newConcurrentMap(Map<? extends K, ? extends V> map) {
+    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(Map<? extends K, ? extends V> map) {
         return new ConcurrentHashMap<>(map);
     }
 
     /**
-     * 创建指定大小的ConcurrentMap
+     * 创建指定大小的ConcurrentHashMap
      * @param size                  大小参数
      * @param <K>                   K
      * @param <V>                   V
-     * @return                      ConcurrentMap
+     * @return                      ConcurrentHashMap
      */
-    public static <K, V> ConcurrentMap<K, V> newConcurrentMapWithSize(int size) {
+    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMapWithSize(int size) {
         return new ConcurrentHashMap<>(size);
     }
 
@@ -126,7 +126,7 @@ public final class Maps {
 
     /**
      * 创建TreeMap,并初始化数据
-     * 可用于HashMap,ConcurrentMap等map转TreeMap
+     * 可用于HashMap,ConcurrentHashMap等map转TreeMap
      * @param map               HashMap,TreeMap等map参数
      * @param <K>               K
      * @param <V>               V
