@@ -14,4 +14,11 @@ public final class ObjectsTest {
         String a1 = Objects.defaultIfNull(a, "默认值");
         System.out.println(a1);
     }
+
+    @Test
+    public void testEquals() {
+        String o1 = "123";
+        String o2 = null;
+        System.out.println(Objects.equals(o1, o2));
+    }
 }

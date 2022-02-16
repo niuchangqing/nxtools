@@ -2,13 +2,13 @@ package cn.nxtools.common.tuple;
 
 class Tuple7Impl<T1, T2, T3, T4, T5, T6, T7> extends Tuple7<T1, T2, T3, T4, T5, T6, T7> {
 
-    public Tuple7Impl(T1 first, T2 second, T3 third, T4 fourth, T5 fifth, T6 sixth, T7 seventh) {
-        this.first = first;
-        this.second = second;
-        this.third = third;
-        this.fourth = fourth;
-        this.fifth = fifth;
-        this.sixth = sixth;
-        this.seventh = seventh;
+    public Tuple7Impl(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7) {
+        this.t1 = t1;
+        this.t2 = t2;
+        this.t3 = t3;
+        this.t4 = t4;
+        this.t5 = t5;
+        this.t6 = t6;
+        this.t7 = t7;
     }
 }

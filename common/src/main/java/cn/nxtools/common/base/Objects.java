@@ -34,4 +34,19 @@ public final class Objects {
     public static <T> T defaultIfNull(T obj, T nullValue) {
         return obj == null ? nullValue : obj;
     }
+
+    /**
+     * 比较俩个参数是否一样 <br>
+     * o1不等于null, 调用 {@link Object#equals(Object)}
+     * @param o1            参数1
+     * @param o2            参数2
+     * @return              true or false
+     * @since               1.0.3
+     */
+    public static boolean equals(Object o1, Object o2) {
+        if (o1 == o2) {
+            return true;
+        }
+        return o1 != null && o1.equals(o2);
+    }
 }
