@@ -28,6 +28,12 @@ public final class Stopwatch {
      */
     private long startNanos;
 
+    /**
+     * 总共运行纳秒数<br>
+     * stop -> start 期间耗时不计算在内
+     */
+    private long totalElapsedNanos;
+
     private Stopwatch() {
         this.ticker = Ticker.nanoTicker();
     }
@@ -59,7 +65,7 @@ public final class Stopwatch {
         long nanos = ticker.read();
         checkState(isRunning, "This Stopwatch is already stopped");
         this.isRunning = false;
-        elapsedNanos += nanos - this.startNanos;
+        this.elapsedNanos += nanos - this.startNanos;
         return this;
     }
 
@@ -70,6 +76,10 @@ public final class Stopwatch {
      * @return              Stopwatch(计时器对象)
      */
     public Stopwatch reset() {
+        if (this.isRunning) {
+            //计算耗时时间加入总耗时中
+            this.totalElapsedNanos += ticker.read() - this.startNanos + this.elapsedNanos;
+        }
         this.isRunning = false;
         this.elapsedNanos = 0;
         return this;
@@ -81,9 +91,7 @@ public final class Stopwatch {
      * @return              Stopwatch(计时器对象)
      */
     public Stopwatch resetAndStart() {
-        this.isRunning = false;
-        this.elapsedNanos = 0;
-        start();
+        reset().start();
         return this;
     }
 
@@ -98,6 +106,20 @@ public final class Stopwatch {
 
     private long elapsedNanos() {
         return isRunning ? ticker.read() - startNanos + elapsedNanos : elapsedNanos;
+    }
+
+    /**
+     * <pre>
+     *     总耗时
+     *     返回耗时总时间,指定时间单位
+     *     {@code stop -> start} 之间的耗时不计算在内
+     * </pre>
+     * @param timeUnit          时间单位
+     * @return                  指定时间单位的数量
+     * @since 1.0.4
+     */
+    public long totalElapsed(TimeUnit timeUnit) {
+        return timeUnit.convert(this.totalElapsedNanos + elapsedNanos(), NANOSECONDS);
     }
 
     public String toString() {
