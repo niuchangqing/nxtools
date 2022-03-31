@@ -1,6 +1,7 @@
 package cn.nxtools.common;
 
 import cn.nxtools.common.base.Objects;
+import cn.nxtools.common.text.StringPool;
 
 import java.util.Arrays;
 
@@ -8,23 +9,7 @@ import java.util.Arrays;
  * @author niuchangqing
  * 字符串工具类
  */
-public class StringUtil {
-
-    /**
-     * "" 字符串
-     */
-    public static final String EMPTY = "";
-
-    /**
-     * "null" 字符串常量
-     */
-    public static final String NULL = "null";
-
-    /**
-     * " " 空字符串
-     */
-    public static final String SPACE = " ";
-
+public class StringUtil implements StringPool {
 
     /**
      * 私有构造方法
