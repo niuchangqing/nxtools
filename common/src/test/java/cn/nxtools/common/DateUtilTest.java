@@ -1,6 +1,7 @@
 package cn.nxtools.common;
 
 import cn.nxtools.common.base.Stopwatch;
+import cn.nxtools.common.time.DateUnit;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -96,5 +97,14 @@ public final class DateUtilTest {
     public void endOfDay() {
         Date date = DateUtil.endOfDay(new Date());
         System.out.println(DateUtil.toString(date, DateUtil.YYYY_MM_DD_HH_MM_SS_SSS));
+    }
+
+    @Test
+    public void dateDiff() {
+        Date date1 = DateUtil.of("2022-03-01 14:00:00", DateUtil.YYYY_MM_DD_HH_MM_SS);
+        Date date2 = DateUtil.of("2022-03-02 14:00:00", DateUtil.YYYY_MM_DD_HH_MM_SS);
+        long day = DateUtil.diff(date1, date2, DateUnit.DAY);// 1
+        System.out.println(day);
+        System.out.println(DateUtil.currentTimeNanos());
     }
 }

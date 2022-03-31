@@ -1,5 +1,8 @@
 package cn.nxtools.common;
 
+import cn.nxtools.common.base.Objects;
+import cn.nxtools.common.time.DateUnit;
+
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +41,33 @@ public class DateUtil {
     public static final String YYYYMMDDHHMMSSSSS = "yyyyMMddHHmmssSSS";
 
     /**
+     * 返回当前日期date
+     * @return                  当前日期: {@code new Date();}
+     * @since 1.0.4
+     */
+    public static Date now() {
+        return new Date();
+    }
+
+    /**
+     * 返回当前时间毫秒时间戳
+     * @return                  当前毫秒时间戳
+     * @since 1.0.4
+     */
+    public static long currentTimeMillis() {
+        return System.currentTimeMillis();
+    }
+
+    /**
+     * 返回当前时间纳秒时间戳
+     * @return                  当前时间纳秒时间戳
+     * @since 1.0.4
+     */
+    public static long currentTimeNanos() {
+        return currentTimeMillis() * 1000000 + System.nanoTime() % 1000000;
+    }
+
+    /**
      * 日期时间转字符串,默认yyyy-MM-dd HH:mm:ss格式
      * @param date              日期
      * @return                  日期时间字符串
@@ -74,6 +104,18 @@ public class DateUtil {
         LocalDateTime localDateTime = LocalDateTimeUtil.ofString(dateStr, format);
         Date date = LocalDateTimeUtil.toDate(localDateTime);
         return date;
+    }
+
+    /**
+     * 字符串转日期<br>
+     * 效果等同{@link #of(String, String)}
+     * @param dateStr           日期时间字符串
+     * @param format            日期格式化字符串
+     * @return                  日期
+     * @since 1.0.4
+     */
+    public static Date format(String dateStr , String format) {
+        return of(dateStr, format);
     }
 
     /**
@@ -211,5 +253,26 @@ public class DateUtil {
     public static Date endOfDay(final Date date) {
         LocalDateTime dateTime = LocalDateTimeUtil.endOfDay(ofDate(date));
         return LocalDateTimeUtil.toDate(dateTime);
+    }
+
+    /**
+     * 获取俩个日期之间的差
+     * <pre>
+     *     开始时间(begin)和截止时间(end)都不能为空
+     *     timeUnit参数为空，默认为{@link DateUnit#MILLISECOND}
+     *     如果begin时间比end大，返回的会是负数
+     * </pre>
+     * @param begin                 开始日期
+     * @param end                   截止日期
+     * @param dateUnit              时间差单位
+     * @return                      时间差数量
+     * @since 1.0.4
+     */
+    public static long diff(Date begin, Date end, DateUnit dateUnit) {
+        checkNotNull(begin, "begin date must be not null");
+        checkNotNull(end, "end Date must be not null");
+        dateUnit = Objects.defaultIfNull(dateUnit, DateUnit.MILLISECOND);
+        long diff = end.getTime() - begin.getTime();
+        return diff / dateUnit.getMillis();
     }
 }
