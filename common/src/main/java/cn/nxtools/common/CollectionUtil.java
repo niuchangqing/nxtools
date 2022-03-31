@@ -126,11 +126,11 @@ public class CollectionUtil {
     /**
      * 集合转Map, 指定集合对象中的字段作为key或value <br>
      * <pre>
-     *     List<User> list = Lists.newArrayList();
-     *     User user = new User();
-     *     user.setId(1L);
-     *     list.add(user);
-     *     Map<Long, User> map = CollectionUtil.toMap(map, list, User::getId, v -> v);
+     *     {@code List<User> list = Lists.newArrayList();}
+     *     {@code User user = new User();}
+     *     {@code user.setId(1L);}
+     *     {@code list.add(user);}
+     *     {@code Map<Long, User> map = CollectionUtil.toMap(map, list, User::getId, v -> v);}
      * </pre>
      * @param iterable          集合
      * @param key               map的key
@@ -149,12 +149,12 @@ public class CollectionUtil {
      * 集合转Map, 指定集合对象中的字段作为key或value <br>
      * 如果map为空，会调用Maps.newHashMap();方法初始化map
      * <pre>
-     *     List<User> list = Lists.newArrayList();
+     *     {@code List<User> list = Lists.newArrayList();
      *     User user = new User();
      *     user.setId(1L);
      *     list.add(user);
      *     Map<Long, User> map = Maps.newHashMap();
-     *     map = CollectionUtil.toMap(map, list, k -> k.getId(), v -> v);
+     *     map = CollectionUtil.toMap(map, list, k -> k.getId(), v -> v);}
      * </pre>
      * @param map               转换的Map
      * @param iterable          集合

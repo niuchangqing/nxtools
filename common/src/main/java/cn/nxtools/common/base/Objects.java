@@ -27,12 +27,12 @@ public final class Objects {
     /**
      * 对象为空即返回默认值,否则返回当前对象
      * @param obj           指定对象
-     * @param nullValue     obj参数为空,返回的参数
+     * @param defaultValue  obj参数为空,返回的参数
      * @param <T>           T
-     * @return              返回obj or defaultObj
+     * @return              返回obj or defaultValue
      */
-    public static <T> T defaultIfNull(T obj, T nullValue) {
-        return obj == null ? nullValue : obj;
+    public static <T> T defaultIfNull(T obj, T defaultValue) {
+        return obj == null ? defaultValue : obj;
     }
 
     /**
