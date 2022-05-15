@@ -97,5 +97,6 @@ public final class StopwatchTest {
 
         System.out.println(stopwatch.elapsed(TimeUnit.MILLISECONDS));//0
         System.out.println(stopwatch.totalElapsed(TimeUnit.MILLISECONDS));// 3000
+        System.out.println(stopwatch.totalToString());//3s
     }
 }

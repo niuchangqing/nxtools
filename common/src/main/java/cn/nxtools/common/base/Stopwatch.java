@@ -122,8 +122,25 @@ public final class Stopwatch {
         return timeUnit.convert(this.totalElapsedNanos + elapsedNanos(), NANOSECONDS);
     }
 
+    /**
+     * 返回耗时时间
+     * @return      任务耗时
+     */
+    @Override
     public String toString() {
         long nanos = elapsedNanos();
+        TimeUnit timeUnit = chooseUnit(nanos);
+        double v = (double) nanos / NANOSECONDS.convert(1,timeUnit);
+        return String.format("%.6f%s",v,timeUnitAbbreviate(timeUnit));
+    }
+
+    /**
+     * 返回总耗时时间
+     * @return      任务总耗时
+     * @since 1.0.5
+     */
+    public String totalToString() {
+        long nanos = this.totalElapsedNanos + elapsedNanos();
         TimeUnit timeUnit = chooseUnit(nanos);
         double v = (double) nanos / NANOSECONDS.convert(1,timeUnit);
         return String.format("%.6f%s",v,timeUnitAbbreviate(timeUnit));
