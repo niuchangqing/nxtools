@@ -1,5 +1,7 @@
 package cn.nxtools.common.base;
 
+import java.util.function.Function;
+
 /**
  * @author niuchangqing
  * object相关工具方法
@@ -48,5 +50,49 @@ public final class Objects {
             return true;
         }
         return o1 != null && o1.equals(o2);
+    }
+
+    /**
+     * 参数为空返回null，非空执行用户自定义处理逻辑
+     * <p>
+     *     {@code User user = null;}<br>
+     *     {@code String name = Objects.map(user, u -> u.getName());}<br>
+     *     {@code System.out.println(name);}<br>
+     *     输出: null
+     * </p>
+     * @param obj               参数
+     * @param mapper            参数非空自定义执行逻辑
+     * @param <T>               参数T
+     * @param <U>               返回结果U
+     * @return                  返回结果
+     * @since 1.0.5
+     */
+    public static <T, U> U map(T obj, Function<? super T, ? extends U> mapper) {
+        return map(obj, mapper, null);
+    }
+
+    /**
+     * 参数为空返回自定义的value，非空执行用户自定义处理逻辑
+     * <p>
+     *     {@code User user = new User();}<br>
+     *     {@code user.setName("lisi");}<br>
+     *     {@code String name = Objects.map(user, u -> u.getName(), "zhangsan")}<br>
+     *     {@code System.out.println(name);}<br>
+     *     输出: lisi
+     * </p>
+     * @param obj               参数
+     * @param mapper            参数非空自定义执行逻辑
+     * @param defaultValue      参数为空默认返回的值
+     * @param <T>               参数T
+     * @param <U>               返回U
+     * @return                  返回值
+     * @since 1.0.5
+     */
+    public static <T, U> U map(T obj, Function<? super T, ? extends U> mapper, U defaultValue) {
+        Preconditions.checkNotNull(mapper, "mapper must not be null");
+        if (obj == null) {
+            return defaultValue;
+        }
+        return mapper.apply(obj);
     }
 }
