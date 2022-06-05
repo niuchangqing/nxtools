@@ -5,6 +5,7 @@ import cn.nxtools.common.collect.Lists;
 import cn.nxtools.common.collect.Sets;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -43,5 +44,12 @@ public final class SetsTest {
         treeSet.add("2");
         treeSet.add("1");
         System.out.println(JsonUtil.toString(treeSet));
+    }
+
+    @Test
+    public void testListToSet() {
+        List<String> list = Lists.newArrayList("1","1","2");
+        Set<String> sets = Sets.newHashSet(list);
+        System.out.println(JsonUtil.toString(sets));//["1","2"]
     }
 }

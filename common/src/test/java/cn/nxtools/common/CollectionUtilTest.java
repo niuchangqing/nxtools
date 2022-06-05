@@ -2,8 +2,14 @@ package cn.nxtools.common;
 
 import cn.nxtools.common.collect.Lists;
 import cn.nxtools.common.collect.Maps;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +44,13 @@ public final class CollectionUtilTest {
 
         private String name;
 
+        private LocalDateTime createTime;
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        private LocalDateTime updateTime;
+
         public User() {
         }
 
@@ -60,6 +73,21 @@ public final class CollectionUtilTest {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public void setCreateTime(LocalDateTime createTime) {
+            this.createTime = createTime;
+        }
+
+        public LocalDateTime getCreateTime() {
+            return this.createTime;
+        }
+
+        public void setUpdateTime(LocalDateTime updateTime) {
+            this.updateTime = updateTime;
+        }
+        public LocalDateTime getUpdateTime() {
+            return this.updateTime;
         }
     }
 }
