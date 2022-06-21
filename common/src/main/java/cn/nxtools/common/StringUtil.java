@@ -76,7 +76,7 @@ public class StringUtil implements StringPool {
 
     /**
      * 格式化文本, {} 表示占位符<br>
-     * 如果自定义占位符请调用 {@link #format(String, String, Object...)} <br>
+     * 如果自定义占位符请调用 {@link #formatWith(String, String, Object...)} <br>
      * <pre>
      * 若参数多于占位符数量, 自动拼接到模版末尾处
      * </pre>
@@ -86,7 +86,7 @@ public class StringUtil implements StringPool {
      * @since 1.0.2
      */
     public static String format(String template, Object... params) {
-        return format(template, "{}", params);
+        return formatWith(template, "{}", params);
     }
 
     /**
@@ -104,7 +104,7 @@ public class StringUtil implements StringPool {
      * @return                          如果template参为null,返回"null"字符串
      * @since 1.0.2
      */
-    public static String format(String template, String placeholder, Object... params) {
+    public static String formatWith(String template, String placeholder, Object... params) {
         if (isNull(template)) {
             return NULL;
         }

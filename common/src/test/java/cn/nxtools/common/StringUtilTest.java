@@ -64,6 +64,13 @@ public final class StringUtilTest {
     }
 
     @Test
+    public void testFormatWith() {
+        String template = "iwoahut%sjowiajra%s}jjnja%s";
+        System.out.println(StringUtil.formatWith(template, "%s", "张张","111", "222", "333", "444"));
+        //iwoahut张张jowiajra111}jjnja222 [333, 444]
+    }
+
+    @Test
     public void testLeftAppendChar() {
         String str = "100";
         System.out.println(StringUtil.leftAppend(str, 10, '0'));
