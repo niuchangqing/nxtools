@@ -130,7 +130,7 @@ public class CollectionUtil {
      *     {@code User user = new User();}
      *     {@code user.setId(1L);}
      *     {@code list.add(user);}
-     *     {@code Map<Long, User> map = CollectionUtil.toMap(map, list, User::getId, v -> v);}
+     *     {@code Map<Long, User> map = CollectionUtil.toMap(list, User::getId, v -> v);}
      * </pre>
      * @param iterable          集合
      * @param key               map的key
