@@ -32,4 +32,28 @@ public interface StringPool {
      * @since 1.0.4
      */
     String AT = "@";
+
+    /**
+     * {@code ","} 逗号字符串
+     * @since 1.0.7
+     */
+    String COMMA = ",";
+
+    /**
+     * {@code ":"} 冒号字符串
+     * @since 1.0.7
+     */
+    String COLON = ":";
+
+    /**
+     * {@code "_"} 下划线字符串
+     * @since 1.0.7
+     */
+    String UNDER_LINE = "_";
+
+    /**
+     * {@code "[]} 空数组字符串
+     * @since 1.0.7
+     */
+    String EMPTY_ARRAY = "[]";
 }
