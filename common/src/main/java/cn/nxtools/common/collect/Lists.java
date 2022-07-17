@@ -1,8 +1,11 @@
 package cn.nxtools.common.collect;
 
+import cn.nxtools.common.CollectionUtil;
+
 import java.util.*;
 
 import static cn.nxtools.common.base.Preconditions.checkNotNull;
+import static cn.nxtools.common.base.Preconditions.checkState;
 
 /**
  * @author niuchangqing
@@ -124,5 +127,71 @@ public final class Lists {
         LinkedList<E> list = newLinkedList();
         Iterators.addAll(list, elements);
         return list;
+    }
+
+    /**
+     * <p>
+     * 按照指定长度拆分list, 调用{@link List#subList(int, int)}方法, <br>
+     * 此方法返回的是原list的数据, 原list发生改变, 拆分后的结果也会发生改变
+     * </p>
+     * @param list                      待拆分list
+     * @param size                      分段长度
+     * @param <E>                       E
+     * @return                          拆分后的结果
+     * @since 1.0.7
+     */
+    public static <E> List<List<E>> partition(List<E> list, int size) {
+        if (CollectionUtil.isEmpty(list)) {
+            //集合为空或长度等于0, 该list不可变
+            return Collections.emptyList();
+        }
+        checkState(size > 0, "size must be greater than 0");
+        if (list instanceof RandomAccess) {
+            return new RandomAccessPartition<>(list, size);
+        } else {
+            return new Partition<>(list, size);
+        }
+    }
+
+    private static class RandomAccessPartition<E extends Object> extends Partition<E> implements RandomAccess {
+
+        public RandomAccessPartition(List<E> list, int size) {
+            super(list, size);
+        }
+    }
+
+    private static class Partition<E extends Object> extends AbstractList<List<E>> {
+
+        /**
+         * 被拆分的list
+         */
+        protected final List<E> list;
+
+        /**
+         * 拆分分段大小
+         */
+        protected final int size;
+
+        public Partition(List<E> list, int size) {
+            this.list = list;
+            this.size = Math.min(size, list.size());
+        }
+
+        @Override
+        public List<E> get(int index) {
+            int start = index * this.size;
+            int end = Math.min(start + this.size, list.size());
+            return list.subList(start, end);
+        }
+
+        @Override
+        public int size() {
+            final int total = list.size();
+            int length = total / this.size;
+            if (total % this.size > 0) {
+                length += 1;
+            }
+            return length;
+        }
     }
 }
