@@ -1,10 +1,15 @@
 package cn.nxtools.common;
 
+import cn.nxtools.common.collect.Maps;
+import cn.nxtools.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Test;
 import cn.nxtools.common.collect.Lists;
 
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author niuchangqing
@@ -52,6 +57,11 @@ public final class ListsTest {
         ArrayList<String> arrayList = Lists.newArrayList("5","6","7");
         LinkedList<String> strings3 = Lists.newLinkedList(arrayList);
         System.out.println(JsonUtil.toString(strings3));
+
+        Set<String> sets = null;
+        LinkedList<String> linkedList = Lists.newLinkedList(sets);
+        Assert.assertNotNull(linkedList);
+        Assert.assertEquals(0, linkedList.size());
     }
 
     @Test
@@ -77,5 +87,40 @@ public final class ListsTest {
         List<String> list5 = null;
         List<List<String>> partition6 = Lists.partition(list5, 10);
         Assert.assertEquals(partition6.size(), 0);
+    }
+
+    @Test
+    public void copyOnWriteArrayListTest() {
+        CopyOnWriteArrayList<String> list = Lists.newCopyOnWriteArrayList();
+        Assert.assertEquals(0, list.size());
+        Assert.assertEquals("[]", list.toString());
+        ArrayList<String> list1 = Lists.newArrayList(list);
+        Assert.assertEquals(0, list1.size());
+        Assert.assertEquals("[]", list1.toString());
+        LinkedList<String> list2 = Lists.newLinkedList(list);
+        Assert.assertEquals(0, list2.size());
+        Assert.assertEquals("[]", list2.toString());
+
+        CopyOnWriteArrayList<Integer> list3 = Lists.newCopyOnWriteArrayList(Lists.newArrayList(1, 2));
+        Assert.assertEquals(2, list3.size());
+        CopyOnWriteArrayList<Integer> list4 = Lists.newCopyOnWriteArrayList(Lists.newLinkedList(1, 2));
+        Assert.assertEquals(2, list4.size());
+
+        HashSet<Integer> sets = Sets.newHashSet(1, 2);
+        CopyOnWriteArrayList<Integer> list5 = Lists.newCopyOnWriteArrayList(sets.iterator());
+        Assert.assertEquals(2, list5.size());
+        BlockingQueue<String> queue = new LinkedBlockingQueue<>();
+        queue.add("1");
+        queue.add("2");
+        CopyOnWriteArrayList<String> list6 = Lists.newCopyOnWriteArrayList(queue);
+        Assert.assertEquals(2, list6.size());
+
+        CopyOnWriteArrayList<String> list7 = Lists.newCopyOnWriteArrayList("1", "2", "3");
+        Assert.assertEquals(3, list7.size());
+
+        List<String> l = null;
+        CopyOnWriteArrayList<String> list8 = Lists.newCopyOnWriteArrayList(l);
+        Assert.assertNotNull(list8);
+        Assert.assertEquals(0, list8.size());
     }
 }

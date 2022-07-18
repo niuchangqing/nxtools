@@ -3,9 +3,10 @@ package cn.nxtools.common.collect;
 import cn.nxtools.common.CollectionUtil;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import static cn.nxtools.common.base.Preconditions.checkNotNull;
 import static cn.nxtools.common.base.Preconditions.checkState;
+import static cn.nxtools.common.base.Objects.isNull;
 
 /**
  * @author niuchangqing
@@ -32,7 +33,9 @@ public final class Lists {
      * @return                          ArrayList
      */
     public static <E> ArrayList<E> newArrayList(E... elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newArrayList();
+        }
         ArrayList<E> list = new ArrayList<>(elements.length);
         Collections.addAll(list,elements);
         return list;
@@ -47,7 +50,9 @@ public final class Lists {
      * @return                          ArrayList
      */
     public static <E> ArrayList<E> newArrayList(Iterable<? extends E> elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newArrayList();
+        }
         ArrayList<E> list = newArrayList();
         Iterables.addAll(list,elements);
         return list;
@@ -64,6 +69,9 @@ public final class Lists {
      * @return                          ArrayList
      */
     public static <E> ArrayList<E> newArrayList(Iterator<? extends E> elements) {
+        if (isNull(elements)) {
+            return newArrayList();
+        }
         ArrayList<E> list = newArrayList();
         Iterators.addAll(list,elements);
         return list;
@@ -96,19 +104,23 @@ public final class Lists {
      * @return                          LinkedList
      */
     public static <E> LinkedList<E> newLinkedList(E... elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newLinkedList();
+        }
         return new LinkedList<>(Arrays.asList(elements));
     }
 
     /**
      * 创建LinkedList集合,并初始化数据
-     * 可用于Set,Vector,List等集合类型转ArrayList
+     * 可用于Set,Vector,List等集合类型转LinkedList
      * @param elements                  集合参数
      * @param <E>                       E
      * @return                          LinkedList
      */
     public static <E> LinkedList<E> newLinkedList(Iterable<? extends E> elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newLinkedList();
+        }
         LinkedList<E> list = newLinkedList();
         Iterables.addAll(list, elements);
         return list;
@@ -151,6 +163,67 @@ public final class Lists {
         } else {
             return new Partition<>(list, size);
         }
+    }
+
+    /**
+     * 创建CopyOnWriteArrayList
+     * @param <E>                       E
+     * @return                          CopyOnWriteArrayList
+     * @since 1.0.7
+     */
+    public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList() {
+        return new CopyOnWriteArrayList<>();
+    }
+
+    /**
+     * 创建CopyOnWriteArrayList,并给定初始值<br>
+     * example: <br>
+     * {@code Lists.CopyOnWriteArrayList("1","2");}
+     * @param elements                  初始化参数
+     * @param <E>                       E
+     * @return                          CopyOnWriteArrayList
+     * @since 1.0.7
+     */
+    public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList(E... elements) {
+        if (isNull(elements)) {
+            return newCopyOnWriteArrayList();
+        }
+        return new CopyOnWriteArrayList<>(elements);
+    }
+
+    /**
+     * 创建newCopyOnWriteArrayList <br>
+     * example: <br>
+     * {@code List<String> list = Lists.newArrayList("1", "2");}<br>
+     * {@code Lists.newCopyOnWriteArrayList(list);}
+     * @param elements                  {@link Iterable}
+     * @param <E>                       E
+     * @return                          CopyOnWriteArrayList
+     */
+    public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList(Iterable<? extends E> elements) {
+        if (isNull(elements)) {
+            return newCopyOnWriteArrayList();
+        }
+        Collection<? extends E> collection = (elements instanceof Collection) ? (Collection<? extends E>) elements : newArrayList(elements);
+        return new CopyOnWriteArrayList<>(collection);
+    }
+
+    /**
+     * 创建创建newCopyOnWriteArrayList <br>
+     * example: <br>
+     * {@code Set<Integer> sets = Sets.newHashSet("1", "2");} <br>
+     * {@code Lists.newCopyOnWriteArrayList(sets.iterator());} <br>
+     * @param elements                  {@link Iterators}
+     * @param <E>                       E
+     * @return                          CopyOnWriteArrayList
+     */
+    public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList(Iterator<? extends E> elements) {
+        if (isNull(elements)) {
+            return newCopyOnWriteArrayList();
+        }
+        CopyOnWriteArrayList<E> copyOnWriteArrayList = newCopyOnWriteArrayList();
+        Iterators.addAll(copyOnWriteArrayList, elements);
+        return copyOnWriteArrayList;
     }
 
     private static class RandomAccessPartition<E extends Object> extends Partition<E> implements RandomAccess {
