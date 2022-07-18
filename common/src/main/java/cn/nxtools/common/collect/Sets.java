@@ -3,7 +3,7 @@ package cn.nxtools.common.collect;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static cn.nxtools.common.base.Preconditions.checkNotNull;
+import static cn.nxtools.common.base.Objects.isNull;
 
 /**
  * @author niuchangqing
@@ -33,7 +33,9 @@ public final class Sets {
      * @return                  HashSet
      */
     public static <E> HashSet<E> newHashSet(E... elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newHashSet();
+        }
         HashSet<E> hashSet = new HashSet<>(elements.length);
         Collections.addAll(hashSet,elements);
         return hashSet;
@@ -47,7 +49,9 @@ public final class Sets {
      * @return                      HashSet
      */
     public static <E> HashSet<E> newHashSet(Iterable<? extends E> elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newHashSet();
+        }
         HashSet<E> set = newHashSet();
         Iterables.addAll(set, elements);
         return set;
@@ -63,6 +67,9 @@ public final class Sets {
      * @return                      HashSet
      */
     public static <E> HashSet<E> newHashSet(Iterator<? extends E> elements) {
+        if (isNull(elements)) {
+            return newHashSet();
+        }
         HashSet<E> set = newHashSet();
         Iterators.addAll(set, elements);
         return set;
@@ -94,7 +101,9 @@ public final class Sets {
      * @return                      Set
      */
     public static <E> Set<E> newConcurrentHashSet(E... elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newConcurrentHashSet();
+        }
         Set<E> set = newConcurrentHashSet(elements.length);
         Collections.addAll(set,elements);
         return set;
@@ -107,7 +116,9 @@ public final class Sets {
      * @return                      Set
      */
     public static <E> Set<E> newConcurrentHashSet(Iterable<? extends E> elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newConcurrentHashSet();
+        }
         Set<E> set = newConcurrentHashSet();
         Iterables.addAll(set, elements);
         return set;
@@ -120,6 +131,9 @@ public final class Sets {
      * @return                          Set
      */
     public static <E> Set<E> newConcurrentHashSet(Iterator<? extends E> elements) {
+        if (isNull(elements)) {
+            return newConcurrentHashSet();
+        }
         Set<E> set = newConcurrentHashSet();
         Iterators.addAll(set, elements);
         return set;
@@ -152,8 +166,7 @@ public final class Sets {
      * @return                          LinkedHashSet
      */
     public static <E> LinkedHashSet<E> newLinkedHashSet(E... elements) {
-        checkNotNull(elements);
-        return new LinkedHashSet<E>(Arrays.asList(elements));
+        return isNull(elements) ? newLinkedHashSet() : new LinkedHashSet<E>(Arrays.asList(elements));
     }
 
     /**
@@ -164,7 +177,9 @@ public final class Sets {
      * @return                          LinkedHashSet
      */
     public static <E> LinkedHashSet<E> newLinkedHashSet(Iterable<? extends E> elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newLinkedHashSet();
+        }
         LinkedHashSet<E> set = newLinkedHashSet();
         Iterables.addAll(set, elements);
         return set;
@@ -180,6 +195,9 @@ public final class Sets {
      * @return                          LinkedHashSet
      */
     public static <E> LinkedHashSet<E> newLinkedHashSet(Iterator<? extends E> elements) {
+        if (isNull(elements)) {
+            return newLinkedHashSet();
+        }
         LinkedHashSet<E> set = newLinkedHashSet();
         Iterators.addAll(set, elements);
         return set;
@@ -212,8 +230,7 @@ public final class Sets {
      * @return                      TreeSet
      */
     public static <E> TreeSet<E> newTreeSet(E... elements) {
-        checkNotNull(elements);
-        return new TreeSet<>(Arrays.asList(elements));
+        return isNull(elements) ? newTreeSet() : new TreeSet<>(Arrays.asList(elements));
     }
 
     /**
@@ -224,7 +241,9 @@ public final class Sets {
      * @return                      TreeSet
      */
     public static <E> TreeSet<E> newTreeSet(Iterable<? extends E> elements) {
-        checkNotNull(elements);
+        if (isNull(elements)) {
+            return newTreeSet();
+        }
         TreeSet<E> set = newTreeSet();
         Iterables.addAll(set, elements);
         return set;
@@ -237,9 +256,11 @@ public final class Sets {
      * @return                      TreeSet
      */
     public static <E> TreeSet<E> newTreeSet(Iterator<? extends E> elements) {
+        if (isNull(elements)) {
+            return newTreeSet();
+        }
         TreeSet<E> set = newTreeSet();
         Iterators.addAll(set, elements);
         return set;
     }
-
 }

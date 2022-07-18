@@ -2,9 +2,8 @@ package cn.nxtools.common.collect;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
-import static cn.nxtools.common.base.Preconditions.checkNotNull;
+import static cn.nxtools.common.base.Objects.isNull;
 
 /**
  * @author niuchangqing
@@ -32,8 +31,7 @@ public final class Maps {
      * @return                  HashMap
      */
     public static <K, V> HashMap<K, V> newHashMap(Map<? extends K, ? extends V> map) {
-        checkNotNull(map);
-        return new HashMap<>(map);
+        return isNull(map) ? newHashMap() : new HashMap<>(map);
     }
 
     /**
@@ -66,8 +64,7 @@ public final class Maps {
      * @return                  LinkedHashMap
      */
     public static <K, V> LinkedHashMap<K, V> newLinkedHashMap(Map<? extends K, ? extends V> map) {
-        checkNotNull(map);
-        return new LinkedHashMap<>(map);
+        return isNull(map) ? newLinkedHashMap() : new LinkedHashMap<>(map);
     }
 
     /**
@@ -100,7 +97,7 @@ public final class Maps {
      * @return                          a ConcurrentHashMap
      */
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(Map<? extends K, ? extends V> map) {
-        return new ConcurrentHashMap<>(map);
+        return isNull(map) ? newConcurrentHashMap() : new ConcurrentHashMap<>(map);
     }
 
     /**
@@ -133,8 +130,7 @@ public final class Maps {
      * @return                  TreeMap
      */
     public static <K, V> TreeMap<K,V> newTreeMap(Map<? extends K, ? extends V> map) {
-        checkNotNull(map);
-        return new TreeMap<>(map);
+        return isNull(map) ? newTreeMap() : new TreeMap<>(map);
     }
 
     /**
@@ -155,8 +151,7 @@ public final class Maps {
      * @return                  WeakHashMap
      */
     public static <K, V> WeakHashMap<K, V> newWeakHashMap(Map<? extends K, ? extends V> map) {
-        checkNotNull(map);
-        return new WeakHashMap<>(map);
+        return isNull(map) ? newWeakHashMap() : new WeakHashMap<>(map);
     }
 
     /**

@@ -1,11 +1,13 @@
 package cn.nxtools.common;
 
+import org.junit.Assert;
 import org.junit.Test;
 import cn.nxtools.common.collect.Lists;
 import cn.nxtools.common.collect.Sets;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -51,5 +53,15 @@ public final class SetsTest {
         List<String> list = Lists.newArrayList("1","1","2");
         Set<String> sets = Sets.newHashSet(list);
         System.out.println(JsonUtil.toString(sets));//["1","2"]
+
+        List<String> l = null;
+        HashSet<String> sets1 = Sets.newHashSet(l);
+        Assert.assertNotNull(sets1);
+        Assert.assertEquals(0, sets1.size());
+
+        Iterator<String> iterator = null;
+        HashSet<String> set2 = Sets.newHashSet(iterator);
+        Assert.assertNotNull(set2);
+        Assert.assertEquals(0, set2.size());
     }
 }

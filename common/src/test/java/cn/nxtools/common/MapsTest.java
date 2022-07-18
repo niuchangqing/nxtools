@@ -1,5 +1,6 @@
 package cn.nxtools.common;
 
+import org.junit.Assert;
 import org.junit.Test;
 import cn.nxtools.common.collect.Maps;
 
@@ -21,6 +22,10 @@ public final class MapsTest {
         hashMap.put("1","2");
         System.out.println(JsonUtil.toString(map));
         System.out.println(JsonUtil.toString(hashMap));
+
+        TreeMap<Object, Object> map1 = Maps.newTreeMap(null);
+        Assert.assertNotNull(map1);
+        Assert.assertEquals(0, map1.size());
     }
 
     @Test
@@ -30,5 +35,9 @@ public final class MapsTest {
         map.put("2","2");
         ConcurrentHashMap<String, String> concurrentMap = Maps.newConcurrentHashMap(map);
         System.out.println(JsonUtil.toString(concurrentMap));
+
+        ConcurrentHashMap<Object, Object> map1 = Maps.newConcurrentHashMap(null);
+        Assert.assertNotNull(map1);
+        Assert.assertEquals(0, map1.size());
     }
 }
