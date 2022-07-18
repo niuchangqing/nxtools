@@ -199,6 +199,7 @@ public final class Lists {
      * @param elements                  {@link Iterable}
      * @param <E>                       E
      * @return                          CopyOnWriteArrayList
+     * @since 1.0.7
      */
     public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList(Iterable<? extends E> elements) {
         if (isNull(elements)) {
@@ -216,6 +217,7 @@ public final class Lists {
      * @param elements                  {@link Iterators}
      * @param <E>                       E
      * @return                          CopyOnWriteArrayList
+     * @since 1.0.7
      */
     public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList(Iterator<? extends E> elements) {
         if (isNull(elements)) {
