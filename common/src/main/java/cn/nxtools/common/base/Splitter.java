@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static cn.nxtools.common.CollectionUtil.isEmpty;
 import static cn.nxtools.common.CollectionUtil.isNotEmpty;
 import static cn.nxtools.common.StringUtil.isNotEmpty;
 import static cn.nxtools.common.base.Objects.isNull;
@@ -52,14 +51,14 @@ public class Splitter {
     }
 
     /**
-     * 字符串分割
-     * 样例:
-     * Splitter.on(',').splitToList("1,2,3");
+     * 字符串分割 <br>
+     * 样例: <br>
+     * {@code Splitter.on(',').splitToList("1,2,3");} <br>
      * 结果:["1","2","3"]
      * @param str                   待分割字符串
-     * @return                      分割后字符串集合
+     * @return                      分割后字符串集合, {@link java.util.ArrayList}集合
      */
-    public final List<String> splitToList(final String str) {
+    public final List<String> splitToList(final CharSequence str) {
         return splitWork(str);
     }
 
@@ -71,11 +70,8 @@ public class Splitter {
      * @param str                   待分割字符串
      * @return                      分割后字符串数组
      */
-    public final String[] split(final String str) {
+    public final String[] split(final CharSequence str) {
         List<String> list = splitWork(str);
-        if (isNull(list)) {
-            return null;
-        }
         return list.toArray(new String[]{});
     }
 
@@ -87,11 +83,8 @@ public class Splitter {
      * @param str                   待分割字符串
      * @return                      分割后的字符串
      */
-    public final Stream<String> splitToStream(final String str) {
+    public final Stream<String> splitToStream(final CharSequence str) {
         List<String> list = splitWork(str);
-        if (isNull(list)) {
-            return null;
-        }
         return StreamSupport.stream(list.spliterator(),false);
     }
 
@@ -99,9 +92,9 @@ public class Splitter {
     /**
      * 字符串拆分逻辑,返回List集合
      */
-    private final List<String> splitWork(final String str) {
+    private final List<String> splitWork(final CharSequence str) {
         if (isNull(str)) {
-            return null;
+            return Lists.newArrayList();
         }
         int length = str.length();
         if (length == 0) {
@@ -114,7 +107,7 @@ public class Splitter {
             final char sep = this.separator.charAt(0);
             while (i < length) {
                 if (str.charAt(i) == sep) {
-                    list.add(str.substring(startIndex, i));
+                    list.add(str.subSequence(startIndex, i).toString());
                     startIndex = ++i;
                     continue;
                 }
@@ -133,13 +126,13 @@ public class Splitter {
                     }
                 }
                 if (match) {
-                    list.add(str.substring(startIndex, i));
+                    list.add(str.subSequence(startIndex, i).toString());
                     startIndex = i + seqLength;
                 }
                 i++;
             }
         }
-        list.add(str.substring(startIndex, length));
+        list.add(str.subSequence(startIndex, length).toString());
         return list;
     }
 
@@ -200,12 +193,9 @@ public class Splitter {
          * @param str               待分割字符串
          * @return                  Map。注意返回的map不能进行put操作
          */
-        public Map<String,String> split(String str) {
+        public Map<String,String> split(CharSequence str) {
             Map<String,String> map = Maps.newLinkedHashMap();
             List<String> list = outerSplitter.splitToList(str);
-            if (isEmpty(list)) {
-                return Collections.unmodifiableMap(map);
-            }
             for (String s : list) {
                 List<String> mapList = innerSplitter.splitToList(s);
                 checkState(isNotEmpty(mapList) && mapList.size() == 2, String.format("data [%s] is not a valid entry",s));
