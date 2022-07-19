@@ -1,5 +1,6 @@
 package cn.nxtools.common.base;
 
+import cn.nxtools.common.collect.Iterators;
 import cn.nxtools.common.collect.Lists;
 
 import java.util.Iterator;
@@ -7,7 +8,6 @@ import java.util.StringJoiner;
 
 import static cn.nxtools.common.StringUtil.EMPTY;
 import static cn.nxtools.common.base.Objects.isNull;
-import static cn.nxtools.common.base.Preconditions.checkNotNull;
 import static cn.nxtools.common.collect.Iterables.size;
 
 /**
@@ -54,7 +54,7 @@ public class Joiner {
      */
     public final <T> String join(final T... elements) {
         if (isNull(elements)) {
-            return null;
+            return EMPTY;
         }
         return join(elements, 0, elements.length);
     }
@@ -71,7 +71,7 @@ public class Joiner {
      */
     public final String join(final Object[] objects, final int startIndex, final int endIndex) {
         if (isNull(objects)) {
-            return null;
+            return EMPTY;
         }
         return join(Lists.newArrayList(objects), startIndex, endIndex);
     }
@@ -87,7 +87,7 @@ public class Joiner {
      */
     public final String join(final Iterable<?> iterable) {
         if (isNull(iterable)) {
-            return null;
+            return EMPTY;
         }
         int size = size(iterable);
         return join(iterable, 0, size);
@@ -106,9 +106,22 @@ public class Joiner {
      */
     public final String join(final Iterable<?> iterable, final  int startIndex, final int endIndex) {
         if (isNull(iterable)) {
-            return null;
+            return EMPTY;
         }
         return join(iterable.iterator(), startIndex, endIndex);
+    }
+
+    /**
+     * 以指定字符拼接<br>
+     *
+     * @param iterator          迭代器
+     * @return                  拼接的结果字符串
+     */
+    public final String join(Iterator<?> iterator) {
+        if (isNull(iterator)) {
+            return EMPTY;
+        }
+        return join(iterator, 0, Iterators.size(iterator));
     }
 
     /**
@@ -123,10 +136,7 @@ public class Joiner {
      * @return                      拼接结果字符串
      */
     public final String join(final Iterator<?> iterator, final int startIndex, final int endIndex) {
-        if (isNull(iterator)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(iterator) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();
@@ -147,7 +157,9 @@ public class Joiner {
 
 
     CharSequence toString(Object obj) {
-        checkNotNull(obj);
+        if (obj == null) {
+            return null;
+        }
         return (obj instanceof CharSequence) ? (CharSequence) obj : obj.toString();
     }
 
@@ -162,7 +174,7 @@ public class Joiner {
      */
     public final String join(final int[] array) {
         if (isNull(array)) {
-            return null;
+            return EMPTY;
         }
         return join(array, 0, array.length);
     }
@@ -175,10 +187,7 @@ public class Joiner {
      * @return                  拼接结果字符串
      */
     public final String join(final int[] array, final int startIndex, final int endIndex) {
-        if (isNull(array)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(array) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();
@@ -195,7 +204,7 @@ public class Joiner {
      */
     public final String join(final byte[] array) {
         if (isNull(array)) {
-            return null;
+            return EMPTY;
         }
         return join(array, 0, array.length);
     }
@@ -208,10 +217,7 @@ public class Joiner {
      * @return                  拼接结果字符串
      */
     public final String join(final byte[] array, final int startIndex, final int endIndex) {
-        if (isNull(array)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(array) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();
@@ -228,7 +234,7 @@ public class Joiner {
      */
     public final String join(final long[] array) {
         if (isNull(array)) {
-            return null;
+            return EMPTY;
         }
         return join(array, 0, array.length);
     }
@@ -241,10 +247,7 @@ public class Joiner {
      * @return                      拼接结果字符串
      */
     public final String join(final long[] array, final int startIndex, final int endIndex) {
-        if (isNull(array)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(array) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();
@@ -261,7 +264,7 @@ public class Joiner {
      */
     public final String join(final double[] array) {
         if (isNull(array)) {
-            return null;
+            return EMPTY;
         }
         return join(array, 0, array.length);
     }
@@ -274,10 +277,7 @@ public class Joiner {
      * @return                  拼接结果字符串
      */
     public final String join(final double[] array, final int startIndex, final int endIndex) {
-        if (isNull(array)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(array) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();
@@ -294,7 +294,7 @@ public class Joiner {
      */
     public final String join(final float[] array) {
         if (isNull(array)) {
-            return null;
+            return EMPTY;
         }
         return join(array, 0, array.length);
     }
@@ -307,10 +307,7 @@ public class Joiner {
      * @return                  拼接结果字符串
      */
     public final String join(final float[] array, final int startIndex, final int endIndex) {
-        if (isNull(array)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(array) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();
@@ -327,7 +324,7 @@ public class Joiner {
      */
     public final String join(final short[] array) {
         if (isNull(array)) {
-            return null;
+            return EMPTY;
         }
         return join(array, 0, array.length);
     }
@@ -340,10 +337,7 @@ public class Joiner {
      * @return                  拼接结果字符串
      */
     public final String join(final short[] array, final int startIndex, final int endIndex) {
-        if (isNull(array)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(array) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();
@@ -360,7 +354,7 @@ public class Joiner {
      */
     public final String join(final boolean[] array) {
         if (isNull(array)) {
-            return null;
+            return EMPTY;
         }
         return join(array, 0, array.length);
     }
@@ -373,10 +367,7 @@ public class Joiner {
      * @return                      拼接结果字符串
      */
     public final String join(final boolean[] array, final  int startIndex, final int endIndex) {
-        if (isNull(array)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(array) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();
@@ -393,7 +384,7 @@ public class Joiner {
      */
     public final String join(final char[] array) {
         if (isNull(array)) {
-            return null;
+            return EMPTY;
         }
         return join(array, 0, array.length);
     }
@@ -406,10 +397,7 @@ public class Joiner {
      * @return                  拼接结果字符串
      */
     public final String join(final char[] array, final  int startIndex, final int endIndex) {
-        if (isNull(array)) {
-            return null;
-        }
-        if (endIndex - startIndex <= 0) {
+        if (isNull(array) || endIndex - startIndex <= 0) {
             return EMPTY;
         }
         final StringJoiner stringJoiner = newStringJoiner();

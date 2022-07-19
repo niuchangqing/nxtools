@@ -1,11 +1,17 @@
 package cn.nxtools.common;
 
+import cn.nxtools.common.collect.Maps;
+import cn.nxtools.common.collect.Sets;
+import org.junit.Assert;
 import org.junit.Test;
 import cn.nxtools.common.base.Joiner;
 import cn.nxtools.common.collect.Iterators;
 import cn.nxtools.common.collect.Lists;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author niuchangqing
@@ -89,5 +95,60 @@ public final class JoinerTest {
         public String toString() {
             return JsonUtil.toString(this);
         }
+    }
+
+
+    @Test
+    public void testJoiner() {
+        String empty = "";
+
+        String join1 = Joiner.on(",").join(null, null);
+        Assert.assertEquals("null,null", join1);
+        String join2 = Joiner.on(",").join("1", "2");
+        Assert.assertEquals("1,2", join2);
+        Integer[] integers = null;
+        String join3 = Joiner.on(",").join(integers);
+        Assert.assertNotNull(join3);
+        Assert.assertEquals(empty, join3);
+        Integer[] integers1 = new Integer[]{1,2};
+        String join = Joiner.on(",").join(integers1, 0, integers1.length);
+        Assert.assertEquals("1,2", join);
+        User[] users = new User[]{new User("张三"), null};
+        String join4 = Joiner.on(",").join(users);
+        Assert.assertEquals("{\"name\":\"张三\"},null", join4);
+
+        Iterable<?> iterable = null;
+        String join5 = Joiner.on(",").join(iterable);
+        Assert.assertNotNull(join5);
+        Assert.assertEquals(empty, join5);
+        String join6 = Joiner.on(",").join(Lists.newArrayList("1", "2"), 1, 2);
+        Assert.assertEquals("2", join6);
+
+        Iterator<?> iterator = null;
+        String join7 = Joiner.on(',').join(iterator);
+        Assert.assertNotNull(join7);
+        Assert.assertEquals(empty, join7);
+        String join8 = Joiner.on(",").join(Sets.newHashSet("1", "2").iterator(), 1, 2);
+        Assert.assertEquals("2", join8);
+
+        int[] ints = null;
+        String join9 = Joiner.on(",").join(ints);
+        Assert.assertNotNull(join9);
+        Assert.assertEquals(empty, join9);
+        int[] ints1 = new int[]{1,2};
+        String join10 = Joiner.on(",").join(ints1);
+        Assert.assertEquals(join10, "1,2");
+        String join11 = Joiner.on(",").join(ints1, 1, 2);
+        Assert.assertEquals(join11, "2");
+
+        double[] doubles = null;
+        String join12 = Joiner.on(',').join(doubles);
+        Assert.assertNotNull(join12);
+        Assert.assertEquals(empty, join12);
+        double[] doubles1 = new double[]{1.2,3.2};
+        String join13 = Joiner.on(',').join(doubles1);
+        Assert.assertEquals("1.2,3.2", join13);
+        String join14 = Joiner.on(',').join(doubles1, 1, 2);
+        Assert.assertEquals("3.2", join14);
     }
 }
