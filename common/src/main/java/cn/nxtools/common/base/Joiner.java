@@ -113,9 +113,9 @@ public class Joiner {
 
     /**
      * 以指定字符拼接<br>
-     *
      * @param iterator          迭代器
      * @return                  拼接的结果字符串
+     * @since 1.0.7
      */
     public final String join(Iterator<?> iterator) {
         if (isNull(iterator)) {
