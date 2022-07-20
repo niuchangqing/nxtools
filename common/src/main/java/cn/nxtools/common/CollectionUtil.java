@@ -200,7 +200,7 @@ public class CollectionUtil {
      * @see Objects#defaultIfNull(Object, Supplier)
      * @since 1.0.7
      */
-    public static <T extends Collection<E>, E> T defaultIfNull(final T collection, Supplier<? extends T> supplier) {
+    public static <T extends Collection<E>, E> T defaultIfNull(final T collection, final Supplier<? extends T> supplier) {
         return isNull(collection) ? supplier.get() : collection;
     }
 
@@ -218,7 +218,7 @@ public class CollectionUtil {
      * @return                      null或[]时返回defaultCollection, 否则返回collection
      * @since 1.0.7
      */
-    public static <T extends Collection<E>, E>  T defaultIfEmpty(final T collection, Supplier<? extends T> supplier) {
+    public static <T extends Collection<E>, E>  T defaultIfEmpty(final T collection, final Supplier<? extends T> supplier) {
         return isEmpty(collection) ? supplier.get() : collection;
     }
 
@@ -238,7 +238,7 @@ public class CollectionUtil {
      * @see Objects#defaultIfNull(Object, Supplier)
      * @see 1.0.7
      */
-    public static <T extends Map<K, V>, K, V> T defaultIfNull(final T map, Supplier<? extends T> supplier) {
+    public static <T extends Map<K, V>, K, V> T defaultIfNull(final T map, final Supplier<? extends T> supplier) {
         return isNull(map) ? supplier.get() : map;
     }
 
@@ -260,7 +260,9 @@ public class CollectionUtil {
      * @see Objects#defaultIfNull(Object, Supplier)
      * @since 1.0.7
      */
-    public static <T extends Map<K, V>, K, V> T defaultIfEmpty(final T map, Supplier<? extends T> supplier) {
+    public static <T extends Map<K, V>, K, V> T defaultIfEmpty(final T map, final Supplier<? extends T> supplier) {
         return isEmpty(map) ? supplier.get() : map;
     }
+
+
 }

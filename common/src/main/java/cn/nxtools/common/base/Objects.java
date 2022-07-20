@@ -39,7 +39,7 @@ public final class Objects {
      * @param <T>           T
      * @return              返回obj or defaultValue
      */
-    public static <T> T defaultIfNull(T obj, T defaultValue) {
+    public static <T> T defaultIfNull(final T obj, final T defaultValue) {
         return obj == null ? defaultValue : obj;
     }
 
@@ -56,7 +56,7 @@ public final class Objects {
      * @return              返回obj or defaultValue
      * @since 1.0.7
      */
-    public static <T> T defaultIfNull(T obj, Supplier<? extends T> supplier) {
+    public static <T> T defaultIfNull(final T obj, final Supplier<? extends T> supplier) {
         return obj == null ? supplier.get() : obj;
     }
 
