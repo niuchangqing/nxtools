@@ -1,9 +1,11 @@
 package cn.nxtools.common;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @author niuchangqing
@@ -110,5 +112,7 @@ public final class StringUtilTest {
         System.out.println(StringUtil.rightAppend("bc", 5, "aa"));//bcaaa
         System.out.println(StringUtil.rightAppend("bc", 2, "aa"));//bc
         System.out.println(StringUtil.rightAppend("bc", 5, ""));//bc
+        String s = StringUtil.defaultIfEmpty("", "1");
+        Assert.assertEquals(s, "1");
     }
 }

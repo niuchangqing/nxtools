@@ -1,6 +1,7 @@
 package cn.nxtools.common.base;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @author niuchangqing
@@ -28,6 +29,11 @@ public final class Objects {
 
     /**
      * 对象为空即返回默认值,否则返回当前对象
+     * <pre>
+     *  Example:
+     *      String object = null;
+     *      String s2 = Objects.defaultIfNull(object, StringUtil.EMPTY);
+     * </pre>
      * @param obj           指定对象
      * @param defaultValue  obj参数为空,返回的参数
      * @param <T>           T
@@ -35,6 +41,23 @@ public final class Objects {
      */
     public static <T> T defaultIfNull(T obj, T defaultValue) {
         return obj == null ? defaultValue : obj;
+    }
+
+    /**
+     * 对象为空即返回默认值,否则返回当前对象
+     * <pre>
+     *  Example:
+     *      String object = null;
+     *      String s1 = Objects.defaultIfNull(object, () -> StringUtil.EMPTY);
+     * </pre>
+     * @param obj           指定对象
+     * @param supplier      懒加载函数
+     * @param <T>           参数类型
+     * @return              返回obj or defaultValue
+     * @since 1.0.7
+     */
+    public static <T> T defaultIfNull(T obj, Supplier<? extends T> supplier) {
+        return obj == null ? supplier.get() : obj;
     }
 
     /**

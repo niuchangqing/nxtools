@@ -1,7 +1,11 @@
 package cn.nxtools.common;
 
 import cn.nxtools.common.base.Objects;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @description Objects工具测试
@@ -42,5 +46,13 @@ public final class ObjectsTest {
 
         String name1 = Objects.map(user, u -> u.getName(), "lisi");
         System.out.println(name1);// zhangsan
+
+        String a = null;
+        String s = Objects.defaultIfNull(a, () -> "");
+        Assert.assertEquals(s, "");
+
+        Set<String> set = null;
+        Set<String> objects = Objects.defaultIfNull(set, () -> new HashSet<>());
+        Assert.assertNotNull(objects);
     }
 }
