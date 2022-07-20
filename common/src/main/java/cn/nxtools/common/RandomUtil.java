@@ -153,4 +153,34 @@ public class RandomUtil {
     public static Color randomColor() {
         return new Color(randomInt(RGB_LIMIT), randomInt(RGB_LIMIT), randomInt(RGB_LIMIT));
     }
+
+    /**
+     * 随机获取double类型随机数, 范围[0 ~ {@link Double#MAX_VALUE}], 最大值不包含{@link Double#MAX_VALUE}
+     * @return              double类型随机数
+     * @since 1.0.7
+     */
+    public static double randomDouble() {
+        return randomDouble(Double.MAX_VALUE);
+    }
+
+    /**
+     * 随机获取double类型随机数, 范围[0, max], 不包含max
+     * @param max           随机数最大值, 最大值不包含max
+     * @return              double类型随机数
+     * @since 1.0.7
+     */
+    public static double randomDouble(final double max) {
+        return randomDouble(0, max);
+    }
+
+    /**
+     * 随机获取double类型随机数, 范围[min,max],不包含max
+     * @param min           随机数最小值,包含min
+     * @param max           随机数最大值, 最大值不包含max
+     * @return              double类型随机数
+     * @since 1.0.7
+     */
+    public static double randomDouble(final double min, final double max) {
+        return getRandom().nextDouble(min, max);
+    }
 }
