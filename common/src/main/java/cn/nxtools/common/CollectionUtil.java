@@ -1,13 +1,15 @@
 package cn.nxtools.common;
 
 import cn.nxtools.common.base.Objects;
+import cn.nxtools.common.collect.Lists;
 import cn.nxtools.common.collect.Maps;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
+import static cn.nxtools.common.base.Preconditions.checkState;
 /**
  * @author niuchangqing
  */
@@ -264,5 +266,63 @@ public class CollectionUtil {
         return isEmpty(map) ? supplier.get() : map;
     }
 
+    /**
+     * 截取集合中的内容<br>
+     * <pre>
+     *     1.当start(截取起始位置)小于0时, 截取起始位置等于0
+     *     2.当start(截取起始位置)大于或等于被截取集合size时, 返回空数组/[]
+     *     3.当length(截取长度)小于或等于0时, 返回空数组
+     *     4.截取后的集合长度小于或等于length参数
+     *     5.被截取集合为空或空数组, 返回空数组/[]
+     * </pre>
+     * @param list                  被截取内容
+     * @param start                 截取起始位置, 包含该位置
+     * @param length                截取长度
+     * @param <T>                   集合中元素类型
+     * @return                      截取后的集合
+     * @since 1.0.7
+     */
+    public static <T> List<T> sub(List<T> list, int start, int length) {
+        if (isEmpty(list) || length <= 0) {
+            return Lists.newArrayListWithSize(0);
+        }
+        int s = Math.max(start, 0);
+        final int size = list.size();
+        if (s > size - 1) {
+            return Lists.newArrayListWithSize(0);
+        }
+        final List<T> result = Lists.newArrayListWithSize(Math.min(length, size));
+        for (int i = s; i < s + length; i++) {
+            if (i < size) {
+                result.add(list.get(i));
+            } else {
+                break;
+            }
+        }
+        return result;
+    }
 
+    /**
+     * 截取集合中的内容<br>
+     * <pre>
+     *     1.当start(截取起始位置)小于0时, 截取起始位置等于0
+     *     2.当start(截取起始位置)大于或等于被截取集合size时, 返回空数组/[]
+     *     3.当length(截取长度)小于或等于0时, 返回空数组
+     *     4.截取后的集合长度小于或等于length参数
+     *     5.被截取集合为空或空数组, 返回空数组/[]
+     * </pre>
+     * @param collection            被截取内容
+     * @param start                 截取起始位置, 包含该位置
+     * @param length                截取长度
+     * @param <T>                   集合中元素类型
+     * @return                      截取后的集合
+     * @since 1.0.7
+     */
+    public static <T> List<T> sub(Collection<T> collection, int start, int length) {
+        if (isEmpty(collection)) {
+            return Lists.newArrayListWithSize(0);
+        }
+        final List<T> list = collection instanceof List ? (List<T>) collection : Lists.newArrayList(collection);
+        return sub(list, start, length);
+    }
 }

@@ -133,4 +133,40 @@ public final class CollectionUtilTest {
         Assert.assertNotNull(s2);
         Assert.assertEquals(s2, StringUtil.EMPTY);
     }
+
+
+    @Test
+    public void testSub() {
+        List<String> list = null;
+        List<String> sub1 = CollectionUtil.sub(list, 0, 10);
+        Assert.assertNotNull(sub1);
+        Assert.assertEquals(sub1.size(), 0);
+
+        Set<String> set = null;
+        List<String> sub2 = CollectionUtil.sub(set, 0, 10);
+        Assert.assertNotNull(sub2);
+        Assert.assertEquals(sub2.size(), 0);
+
+        List<Integer> list1 = Lists.newArrayList(1, 2, 3, 4, 5, 6);
+        List<Integer> sub3 = CollectionUtil.sub(list1, -10, 3);
+        Assert.assertNotNull(sub3);
+        Assert.assertEquals(sub3.size(), 3);
+        List<Integer> sub4 = CollectionUtil.sub(list1, 0, 6);
+        Assert.assertEquals(sub4.size(), 6);
+        Assert.assertEquals("[1, 2, 3, 4, 5, 6]", sub4.toString());
+        List<Integer> sub5 = CollectionUtil.sub(list1, 0, 100);
+        Assert.assertEquals(sub5.size(), 6);
+        Assert.assertEquals("[1, 2, 3, 4, 5, 6]", sub5.toString());
+
+        Set<Integer> set1 = Sets.newHashSet(1, 2, 3, 4, 5, 6);
+        List<Integer> sub6 = CollectionUtil.sub(set1, -10, 3);
+        Assert.assertNotNull(sub6);
+        Assert.assertEquals(sub6.size(), 3);
+        List<Integer> sub7 = CollectionUtil.sub(set1, 0, 6);
+        Assert.assertEquals(sub7.size(), 6);
+        Assert.assertEquals("[1, 2, 3, 4, 5, 6]", sub7.toString());
+        List<Integer> sub8 = CollectionUtil.sub(set1, 0, 100);
+        Assert.assertEquals(sub8.size(), 6);
+        Assert.assertEquals("[1, 2, 3, 4, 5, 6]", sub8.toString());
+    }
 }
