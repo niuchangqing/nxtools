@@ -151,4 +151,27 @@ public final class JoinerTest {
         String join14 = Joiner.on(',').join(doubles1, 1, 2);
         Assert.assertEquals("3.2", join14);
     }
+
+    @Test
+    public void testJoiner1() {
+        List<String> list1 = Lists.newArrayList("1", "2", "3", "4");
+        String str1 = Joiner.on(',').join(list1, 1, list1.size() - 1);
+        System.out.println(str1);
+        Assert.assertEquals("2,3", str1);
+
+        List<String> list2 = Lists.newArrayList("1", "2", null, "3");
+        String str2 = Joiner.on(',').skipNull().join(list2);
+        Assert.assertEquals("1,2,3", str2);
+
+        List<String> list3 = Lists.newArrayList("1", "2", null, "3");
+        String str3 = Joiner.on(',').useForNull("哈哈").join(list3);
+        Assert.assertEquals("1,2,哈哈,3", str3);
+
+        Assert.assertThrows(UnsupportedOperationException.class,
+                () -> Joiner.on(',').skipNull().useForNull("哈哈").join(list3));
+
+        int[] ints = new int[]{1,2,3};
+        String str4 = Joiner.on(',').join(ints, 2, 2);
+        Assert.assertEquals("", str4);
+    }
 }

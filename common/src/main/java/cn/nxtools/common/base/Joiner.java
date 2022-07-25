@@ -19,6 +19,21 @@ public class Joiner {
     private final String separator;
 
     /**
+     * 字符串拼接是是否跳过null
+     */
+    private boolean skipNull = false;
+
+    /**
+     * 拼接的集合中如果出现null可以指定字符串进行替换
+     */
+    private String useForNull;
+
+    /**
+     * 配和{@link #useForNull}属性使用, 当该属性结果为true时, {@link #useForNull}生效
+     */
+    private boolean isUseForNull = false;
+
+    /**
      * 私有构造方法
      */
     private Joiner(String separator) {
@@ -43,11 +58,50 @@ public class Joiner {
     }
 
     /**
+     * 设置是否跳过(忽略)null
+     * <pre>{@code
+     * List<String> list = Lists.newArrayList("1", "2", null, "3");
+     * Joiner.on(',').skipNull().join(list);
+     * // 结果: "1,2,3"
+     * }</pre>
+     * @return                  Joiner
+     */
+    public Joiner skipNull() {
+        if (this.isUseForNull) {
+            //已经设置了指定字符串替换空, 不能在设置跳过null
+            throw new UnsupportedOperationException("already specified useForNull");
+        }
+        this.skipNull = true;
+        return this;
+    }
+
+    /**
+     * 如果集合中出现null, 自动替换为{@code nullText}
+     * <pre>{@code
+     * List<String> list = Lists.newArrayList("1", "2", null, "3");
+     * Joiner.on(',').useForNull("哈哈").join(list);
+     * // 结果: "1,2,哈哈,3"
+     * }</pre>
+     * @param nullText                  null自动替换的字符串
+     * @return                          Joiner
+     */
+    public Joiner useForNull(String nullText) {
+        if (this.skipNull) {
+            //已经设置了自动跳过null, 不能在设置使用指定字符串进行替换
+            throw new UnsupportedOperationException("already specified skipNull");
+        }
+        this.isUseForNull = true;
+        this.useForNull = nullText;
+        return this;
+    }
+
+    /**
      * 以指定字符拼接
-     * 样例：
+     * <pre>{@code
      * String[] strings = new String[]{"2","3","1"}
      * Joiner.on(",").join(strings);
-     * 结果:2,3,1
+     * //结果:2,3,1
+     * }</pre>
      * @param elements               数组
      * @return                      拼接结果字符串
      * @param <T>                   泛型参数
@@ -65,8 +119,8 @@ public class Joiner {
      * Joiner.on(",").join(strings, 0, 2);
      * 结果:2,3
      * @param objects               数组
-     * @param startIndex            指定下标开始进行处理
-     * @param endIndex              指定下标截止终止处理
+     * @param startIndex            指定下标开始进行处理(包含)
+     * @param endIndex              指定下标截止终止处理(不包含)
      * @return                      拼接结果字符串
      */
     public final String join(final Object[] objects, final int startIndex, final int endIndex) {
@@ -100,8 +154,8 @@ public class Joiner {
      * Joiner.on(",").join(list,1,3);
      * 结果:2,1
      * @param iterable              集合
-     * @param startIndex            指定位置开始处理
-     * @param endIndex              指定位置终止处理
+     * @param startIndex            指定位置开始处理(包含)
+     * @param endIndex              指定位置终止处理(不包含)
      * @return                      拼接结果字符串
      */
     public final String join(final Iterable<?> iterable, final  int startIndex, final int endIndex) {
@@ -131,8 +185,8 @@ public class Joiner {
      * Joiner.on(",").join(list.iterator(), 0, Iterators.size(list.iterator()));
      * 结果:3,2,1
      * @param iterator              迭代器
-     * @param startIndex            指定位置开始处理
-     * @param endIndex              指定位置终止处理
+     * @param startIndex            指定位置开始处理(包含)
+     * @param endIndex              指定位置终止处理(不包含)
      * @return                      拼接结果字符串
      */
     public final String join(final Iterator<?> iterator, final int startIndex, final int endIndex) {
@@ -143,14 +197,22 @@ public class Joiner {
         int index = -1;
         while (iterator.hasNext()) {
             index++;
+            Object obj = iterator.next();
             if (index < startIndex) {
-                iterator.next();
                 continue;
             }
             if (index >= endIndex) {
                 break;
             }
-            stringJoiner.add(toString(iterator.next()));
+            if (this.isUseForNull && isNull(obj)) {
+                // 使用指定字符串替换null
+                stringJoiner.add(toString(this.useForNull));
+            } else if (this.skipNull && isNull(obj)) {
+                // 跳过null
+                continue;
+            } else {
+                stringJoiner.add(toString(obj));
+            }
         }
         return stringJoiner.toString();
     }
@@ -182,8 +244,8 @@ public class Joiner {
     /**
      * 以指定字符连接
      * @param array             int数组
-     * @param startIndex        指定位置开始处理
-     * @param endIndex          指定位置截止处理
+     * @param startIndex        指定位置开始处理(包含)
+     * @param endIndex          指定位置截止处理(不包含,如果)
      * @return                  拼接结果字符串
      */
     public final String join(final int[] array, final int startIndex, final int endIndex) {
@@ -212,8 +274,8 @@ public class Joiner {
     /**
      * 以指定字符连接
      * @param array             byte数组
-     * @param startIndex        指定位置开始处理
-     * @param endIndex          指定位置截止处理
+     * @param startIndex        指定位置开始处理(包含)
+     * @param endIndex          指定位置截止处理(不包含)
      * @return                  拼接结果字符串
      */
     public final String join(final byte[] array, final int startIndex, final int endIndex) {
@@ -242,8 +304,8 @@ public class Joiner {
     /**
      * 字符串拼接
      * @param array                 long数组
-     * @param startIndex            指定位置开始处理
-     * @param endIndex              指定位置截止处理
+     * @param startIndex            指定位置开始处理(包含)
+     * @param endIndex              指定位置截止处理(不包含)
      * @return                      拼接结果字符串
      */
     public final String join(final long[] array, final int startIndex, final int endIndex) {
@@ -272,8 +334,8 @@ public class Joiner {
     /**
      * 字符串拼接
      * @param array             double数组
-     * @param startIndex        指定位置开始处理
-     * @param endIndex          指定位置截止处理
+     * @param startIndex        指定位置开始处理(包含)
+     * @param endIndex          指定位置截止处理(不包含)
      * @return                  拼接结果字符串
      */
     public final String join(final double[] array, final int startIndex, final int endIndex) {
@@ -302,8 +364,8 @@ public class Joiner {
     /**
      * 字符串拼接
      * @param array             float数组
-     * @param startIndex        指定位置开始处理
-     * @param endIndex          指定位置截止处理
+     * @param startIndex        指定位置开始处理(包含)
+     * @param endIndex          指定位置截止处理(不包含)
      * @return                  拼接结果字符串
      */
     public final String join(final float[] array, final int startIndex, final int endIndex) {
@@ -332,8 +394,8 @@ public class Joiner {
     /**
      * 字符串拼接
      * @param array             short数组
-     * @param startIndex        指定位置开始处理
-     * @param endIndex          指定位置截止处理
+     * @param startIndex        指定位置开始处理(包含)
+     * @param endIndex          指定位置截止处理(不包含)
      * @return                  拼接结果字符串
      */
     public final String join(final short[] array, final int startIndex, final int endIndex) {
@@ -362,8 +424,8 @@ public class Joiner {
     /**
      * 字符串拼接
      * @param array                 boolean数组
-     * @param startIndex            指定位置开始处理
-     * @param endIndex              指定位置截止处理
+     * @param startIndex            指定位置开始处理(包含)
+     * @param endIndex              指定位置截止处理(不包含)
      * @return                      拼接结果字符串
      */
     public final String join(final boolean[] array, final  int startIndex, final int endIndex) {
@@ -392,8 +454,8 @@ public class Joiner {
     /**
      * 字符串拼接
      * @param array             char数组
-     * @param startIndex        指定位置开始处理
-     * @param endIndex          指定位置截止处理
+     * @param startIndex        指定位置开始处理(包含)
+     * @param endIndex          指定位置截止处理(不包含)
      * @return                  拼接结果字符串
      */
     public final String join(final char[] array, final  int startIndex, final int endIndex) {
