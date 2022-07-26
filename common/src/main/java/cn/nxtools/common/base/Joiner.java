@@ -66,6 +66,7 @@ public class Joiner {
      * Joiner.on(',').skipNull().join(list);
      * // 结果: "1,2,3"
      * }</pre>
+     * 注意: {@link #skipNull()}和{@link #useForNull(String)}方法互斥,不能同时使用
      * @return                  Joiner
      * @since 1.0.7
      */
@@ -85,6 +86,7 @@ public class Joiner {
      * Joiner.on(',').useForNull("哈哈").join(list);
      * // 结果: "1,2,哈哈,3"
      * }</pre>
+     * 注意: {@link #useForNull(String)}和{@link #skipNull()}方法互斥,不能同时使用
      * @param nullText                  null自动替换的字符串
      * @return                          Joiner
      * @since 1.0.7
