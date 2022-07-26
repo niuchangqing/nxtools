@@ -9,6 +9,8 @@ import java.util.StringJoiner;
 import static cn.nxtools.common.StringUtil.EMPTY;
 import static cn.nxtools.common.base.Objects.isNull;
 import static cn.nxtools.common.collect.Iterables.size;
+import static cn.nxtools.common.base.Preconditions.checkState;
+import static cn.nxtools.common.StringUtil.format;
 
 /**
  * @author niuchangqing
@@ -67,11 +69,11 @@ public class Joiner {
      * @return                  Joiner
      * @since 1.0.7
      */
-    public Joiner skipNull() {
-        if (this.isUseForNull) {
-            //已经设置了指定字符串替换空, 不能在设置跳过null
-            throw new UnsupportedOperationException("already specified useForNull");
-        }
+    public final Joiner skipNull() {
+        // 已经设置了指定字符串替换空, 不能在设置跳过null
+        checkState(!this.isUseForNull, () -> new UnsupportedOperationException("already specified useForNull"));
+        // 已经设置过跳过null(skipNull), 不能重复设置
+        checkState(!this.skipNull, () -> new UnsupportedOperationException("already specified skipNull"));
         this.skipNull = true;
         return this;
     }
@@ -87,11 +89,11 @@ public class Joiner {
      * @return                          Joiner
      * @since 1.0.7
      */
-    public Joiner useForNull(String nullText) {
-        if (this.skipNull) {
-            //已经设置了自动跳过null, 不能在设置使用指定字符串进行替换
-            throw new UnsupportedOperationException("already specified skipNull");
-        }
+    public final Joiner useForNull(String nullText) {
+        // 已经设置了自动跳过null, 不能在设置使用指定字符串进行替换
+        checkState(!this.skipNull, () -> new UnsupportedOperationException("already specified skipNull"));
+        // 已经设置了useForNull, 不能重复设置
+        checkState(!this.isUseForNull, () -> new UnsupportedOperationException(format("already specified useForNull: {}", this.useForNull)));
         this.isUseForNull = true;
         this.useForNull = nullText;
         return this;

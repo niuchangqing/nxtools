@@ -173,5 +173,13 @@ public final class JoinerTest {
         int[] ints = new int[]{1,2,3};
         String str4 = Joiner.on(',').join(ints, 2, 2);
         Assert.assertEquals("", str4);
+
+        Assert.assertThrows(UnsupportedOperationException.class,
+                () -> Joiner.on(",").useForNull("噢").skipNull().join(ints));
+
+        Assert.assertThrows(UnsupportedOperationException.class,
+                () -> Joiner.on(',').skipNull().skipNull().join(ints));
+        Assert.assertThrows(UnsupportedOperationException.class,
+                () -> Joiner.on(',').useForNull("哈哈").useForNull("嗯嗯").join(ints));
     }
 }
