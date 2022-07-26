@@ -88,4 +88,24 @@ public final class SplitterTest {
         Assert.assertNotNull(split8);
         Assert.assertEquals(split8.size(), 4);
     }
+
+    @Test
+    public void testLimit() {
+        String str1 = "1,2,3,4,5,";
+        List<String> list1 = Splitter.on(',').limit(3).splitToList(str1);
+        Assert.assertEquals(list1.size(), 3);
+        Assert.assertEquals("[\"1\",\"2\",\"3\"]", JsonUtil.toString(list1));
+        List<String> list2 = Splitter.on(',').splitToList(str1);
+        Assert.assertEquals(list2.size(), 6);
+        Assert.assertEquals("[\"1\",\"2\",\"3\",\"4\",\"5\",\"\"]", JsonUtil.toString(list2));
+
+        String str2 = "1,2";
+        List<String> list3 = Splitter.on(',').limit(5).splitToList(str2);
+        Assert.assertNotEquals(list3.size(), 5);
+        Assert.assertEquals(list3.size(), 2);
+        // 必须大于0
+        Assert.assertThrows(UnsupportedOperationException.class, () -> Splitter.on(',').limit(0).split(str2));
+        // 重复设置limit
+        Assert.assertThrows(UnsupportedOperationException.class, () -> Splitter.on(',').limit(2).limit(3).split(str2));
+    }
 }

@@ -13,6 +13,7 @@ import static cn.nxtools.common.CollectionUtil.isNotEmpty;
 import static cn.nxtools.common.StringUtil.isNotEmpty;
 import static cn.nxtools.common.base.Objects.isNull;
 import static cn.nxtools.common.base.Preconditions.checkState;
+import static cn.nxtools.common.StringUtil.format;
 
 /**
  * @author niuchangqing
@@ -23,6 +24,11 @@ public class Splitter {
      * 拆分字符串
      */
     private final String separator;
+
+    /**
+     * 拆分后集合最大size
+     */
+    private int limit;
 
     /**
      * 私有构造方法
@@ -48,6 +54,31 @@ public class Splitter {
      */
     public static Splitter on(final char separator) {
         return new Splitter(String.valueOf(separator));
+    }
+
+    /**
+     * 拆分后集合最大保留长度, 返回的集合{@link List#size()}可能小于等于{@code limit}但是不会大于{@code limit}
+     * <pre>{@code
+     * String str1 = "1,2,3,4,5,";
+     * List<String> list1 = Splitter.on(',').limit(3).splitToList(str1);
+     * // 结果: ["1","2","3"]
+     * String str2 = "1,2";
+     * List<String> list1 = Splitter.on(',').limit(5).splitToList(str1);
+     * // 结果: ["1","2"]
+     * }</pre>
+     * 注意: 如果{@link List#size()}已达到{@code limit}限制, 剩余字符串将不在加入集合中
+     * @param limit                     拆分后集合最大长度, 必须大于0
+     * @return                          Splitter
+     * @since 1.0.7
+     * @throws UnsupportedOperationException    limit小于或等于0时抛出,或者已经设置过limit值再次设置会抛出异常
+     */
+    public final Splitter limit(int limit) {
+        // limit参数必须大于0
+        checkState(limit > 0, () -> new UnsupportedOperationException(format("must be greater than zero: {}", limit)));
+        // 如果当前对象limit属性值已经大于0, 抛出请勿重复设置limit属性值错误
+        checkState(this.limit <= 0, () -> new UnsupportedOperationException(format("already specified limit: {}", this.limit)));
+        this.limit = limit;
+        return this;
     }
 
     /**
@@ -106,6 +137,9 @@ public class Splitter {
         if (this.separator.length() == 1) {
             final char sep = this.separator.charAt(0);
             while (i < length) {
+                if (this.limit > 0 && list.size() >= this.limit) {
+                    break;
+                }
                 if (str.charAt(i) == sep) {
                     list.add(str.subSequence(startIndex, i).toString());
                     startIndex = ++i;
@@ -116,6 +150,9 @@ public class Splitter {
         }else {
             int seqLength = this.separator.length();
             while (i < length) {
+                if (this.limit > 0 && list.size() >= this.limit) {
+                    break;
+                }
                 boolean match = true;
                 for (int j = 0; j < seqLength; j++) {
                     if (this.separator.charAt(j) == str.charAt(i+j)) {
@@ -132,7 +169,12 @@ public class Splitter {
                 i++;
             }
         }
-        list.add(str.subSequence(startIndex, length).toString());
+        if (this.limit > 0 && list.size() >= this.limit) {
+            // 设置了limit, 并且集合size已经满足limit限制,直接返回
+            return list;
+        } else {
+            list.add(str.subSequence(startIndex, length).toString());
+        }
         return list;
     }
 
