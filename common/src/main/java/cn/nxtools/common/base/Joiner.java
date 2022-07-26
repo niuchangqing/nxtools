@@ -65,6 +65,7 @@ public class Joiner {
      * // 结果: "1,2,3"
      * }</pre>
      * @return                  Joiner
+     * @since 1.0.7
      */
     public Joiner skipNull() {
         if (this.isUseForNull) {
@@ -84,6 +85,7 @@ public class Joiner {
      * }</pre>
      * @param nullText                  null自动替换的字符串
      * @return                          Joiner
+     * @since 1.0.7
      */
     public Joiner useForNull(String nullText) {
         if (this.skipNull) {
