@@ -285,14 +285,14 @@ public final class Sets {
      */
     public static <E> Set<E> intersection(final Set<E> set1, final Set<E> set2, final Set<E>... sets) {
         if (isEmpty(set1) || isEmpty(set2) || isNull(sets)) {
-            return Sets.newLinkedHashSet();
+            return newLinkedHashSet();
         }
         Set<E> result = intersection(set1, set2);
         for (Set<E> s : sets) {
             result = intersection(result, s);
             if (isEmpty(result)) {
                 // 存在空集合直接返回
-                return Sets.newLinkedHashSet();
+                return newLinkedHashSet();
             }
         }
         return result;
@@ -315,8 +315,90 @@ public final class Sets {
      */
     public static <E> Set<E> intersection(final Set<E> set1, final Set<E> set2) {
         if (isEmpty(set1) || isEmpty(set2)) {
-            return Sets.newLinkedHashSet();
+            return newLinkedHashSet();
         }
         return set1.stream().filter(f -> set2.contains(f)).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * 取 set1 - set2 的差集, 在set1集合中有的元素在set2集合中不存在的元素
+     * <pre>{@code
+     * // 实例:
+     * Set<String> set1 = Sets.newHashSet("1", "2", "3", "4");
+     * Set<String> set2 = Sets.newHashSet("3", "4", "5");
+     * Set<String> result = Sets.difference(set1, set2);
+     * // 结果: ["1", "2"]
+     * }</pre>
+     * @param set1          set1
+     * @param set2          set2
+     * @param <E>           集合元素
+     * @return              返回差集集合(LinkedHashSet), 不会返回null
+     * @since 1.0.7
+     */
+    public static <E> Set<E> difference(final Set<E> set1, final Set<E> set2) {
+        if (isEmpty(set1)) {
+            return newLinkedHashSet();
+        }
+        if (isEmpty(set2)) {
+            // 集合2为空, 直接返回集合1
+            return newLinkedHashSet(set1);
+        }
+        return set1.stream().filter(f -> !set2.contains(f)).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+
+    /**
+     * 取集合并集, 所有集合中的元素
+     * <pre>{@code
+     * // 实例:
+     * Set<String> set1 = Sets.newHashSet("1", "2", "3");
+     * Set<String> set2 = Sets.newTreeSet("3", "4", "5");
+     * Set<String> set3 = Sets.newLinkedHashSet("6");
+     * Set<String> result5 = Sets.union(set1, set2, set3);
+     * // 结果: ["1", "2", "3", "4", "5", "6"]
+     * }</pre>
+     * @param set1          set集合参数1
+     * @param set2          set集合参数2
+     * @param sets          其他集合参数
+     * @param <E>           集合元素
+     * @return              返回并集集合(LinkedHashSet), 不会返回null
+     * @since 1.0.7
+     */
+    public static <E> Set<E> union(final Set<E> set1, final Set<E> set2, final Set<E>... sets) {
+        Set<E> union = union(set1, set2);
+        if (isNull(sets)) {
+            return union;
+        }
+        for (Set<E> s : sets) {
+            union = union(union, s);
+        }
+        return union;
+    }
+
+    /**
+     * 取集合并集, set1 + set2集合中的所有元素
+     * <pre>{@code
+     * // 实例:
+     * Set<String> set1 = Sets.newHashSet("1", "2", "3");
+     * Set<String> set2 = Sets.newTreeSet("3", "4", "5");
+     * Set<String> result = Sets.union(set1, set2);
+     * // 结果: ["1", "2", "3", "4", "5"]
+     * }</pre>
+     * @param set1          set集合参数1
+     * @param set2          set集合参数2
+     * @param <E>           集合元素
+     * @return              返回并集集合(LinkedHashSet), 不会返回null
+     * @since 1.0.7
+     */
+    public static <E> Set<E> union(final Set<E> set1, final Set<E> set2) {
+        if (isEmpty(set1)) {
+            return newLinkedHashSet(set2);
+        }
+        if (isEmpty(set2)) {
+            return newLinkedHashSet(set1);
+        }
+        LinkedHashSet<E> result = newLinkedHashSet(set1);
+        result.addAll(set2);
+        return result;
     }
 }

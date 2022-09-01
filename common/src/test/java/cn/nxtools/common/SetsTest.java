@@ -8,6 +8,8 @@ import cn.nxtools.common.collect.Sets;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -78,5 +80,55 @@ public final class SetsTest {
         Set<String> set3 = Sets.newHashSet("3", "4", "5", "6");
         Set<String> result3 = Sets.intersection(set1, set2, set3);
         Assert.assertEquals(result3, Sets.newHashSet("3"));
+    }
+
+    @Test
+    public void testDifference() {
+        Set<String> set1 = null;
+        Set<String> set2 = null;
+        Set<String> result1 = Sets.difference(set1, set2);
+        Assert.assertTrue(result1.size() == 0);
+
+        set1 = Sets.newHashSet("1", "2", "3", "4");
+        Set<String> result2 = Sets.difference(set1, set2);
+        Assert.assertEquals(result2, set1);
+
+        set2 = Sets.newHashSet("3", "4", "5");
+        Set<String> result3 = Sets.difference(set1, set2);
+        Assert.assertEquals(result3, Sets.newHashSet("1", "2"));
+    }
+
+    @Test
+    public void testUnion() {
+        Set<String> set1 = null;
+        Set<String> set2 = null;
+        Set<String> union = Sets.union(set1, set2);
+        Assert.assertTrue(union instanceof LinkedHashSet);
+        Assert.assertTrue(union.size() == 0);
+
+        set1 = Sets.newHashSet("1", "2");
+        set2 = null;
+        Set<String> result1 = Sets.union(set1, set2);
+        Assert.assertEquals(result1, set1);
+
+        set1 = null;
+        set2 = Sets.newTreeSet("1", "2");
+        Set<String> result2 = Sets.union(set1, set2);
+        Assert.assertEquals(result2, set2);
+
+        set1 = Sets.newHashSet("1", "2", "3");
+        set2 = Sets.newTreeSet("3", "4", "5");
+        Set<String> result3 = Sets.union(set1, set2);
+        Assert.assertEquals(result3, Sets.newHashSet("1", "2", "3", "4", "5"));
+
+        Set<String> set3 = null;
+        Set<String> result4 = Sets.union(set1, set2, set3);
+        Assert.assertEquals(result4, Sets.newHashSet("1", "2", "3", "4", "5"));
+
+        set1 = Sets.newHashSet("1", "2", "3");
+        set2 = Sets.newTreeSet("3", "4", "5");
+        set3 = Sets.newLinkedHashSet("6");
+        Set<String> result5 = Sets.union(set1, set2, set3, null);
+        Assert.assertEquals(result5, Sets.newHashSet("1", "2", "3", "4", "5", "6"));
     }
 }
