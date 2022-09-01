@@ -276,19 +276,24 @@ public final class Sets {
      * Set<String> result = Sets.intersection(set1, set2, set3);
      * // 结果: ["3"]
      * }</pre>
-     * @param set           参数1
+     * @param set1          参数1
+     * @param set2          参数2
      * @param sets          其他参数
      * @param <E>           集合元素
-     * @return              返回交集集合, 不会返回null
+     * @return              返回交集集合(LinkedHashSet), 不会返回null
      * @since 1.0.7
      */
-    public static <E> Set<E> intersection(final Set<E> set, final Set<E>... sets) {
-        if (isEmpty(set) || isNull(sets)) {
-            return Sets.newHashSet();
+    public static <E> Set<E> intersection(final Set<E> set1, final Set<E> set2, final Set<E>... sets) {
+        if (isEmpty(set1) || isEmpty(set2) || isNull(sets)) {
+            return Sets.newLinkedHashSet();
         }
-        Set<E> result = newHashSet(set);
+        Set<E> result = intersection(set1, set2);
         for (Set<E> s : sets) {
             result = intersection(result, s);
+            if (isEmpty(result)) {
+                // 存在空集合直接返回
+                return Sets.newLinkedHashSet();
+            }
         }
         return result;
     }
@@ -305,13 +310,13 @@ public final class Sets {
      * @param set1          参数1
      * @param set2          参数2
      * @param <E>           集合元素
-     * @return              返回交集集合, 不会返回null
+     * @return              返回交集集合(LinkedHashSet), 不会返回null
      * @since 1.0.7
      */
     public static <E> Set<E> intersection(final Set<E> set1, final Set<E> set2) {
         if (isEmpty(set1) || isEmpty(set2)) {
-            return Sets.newHashSet();
+            return Sets.newLinkedHashSet();
         }
-        return set1.stream().filter(f -> set2.contains(f)).collect(Collectors.toSet());
+        return set1.stream().filter(f -> set2.contains(f)).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }
