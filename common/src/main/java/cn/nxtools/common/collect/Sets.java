@@ -2,8 +2,10 @@ package cn.nxtools.common.collect;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static cn.nxtools.common.base.Objects.isNull;
+import static cn.nxtools.common.CollectionUtil.isEmpty;
 
 /**
  * @author niuchangqing
@@ -262,5 +264,54 @@ public final class Sets {
         TreeSet<E> set = newTreeSet();
         Iterators.addAll(set, elements);
         return set;
+    }
+
+    /**
+     * 取集合交集, 所有集合中都包含的元素即为交集
+     * <pre>{@code
+     * // 实例:
+     * Set<String> set1 = Sets.newHashSet("1", "2", "3");
+     * Set<String> set2 = Sets.newHashSet("2", "3", "4", "5");
+     * Set<String> set3 = Sets.newHashSet("3", "4", "5", "6");
+     * Set<String> result = Sets.intersection(set1, set2, set3);
+     * // 结果: ["3"]
+     * }</pre>
+     * @param set           参数1
+     * @param sets          其他参数
+     * @param <E>           集合元素
+     * @return              返回交集集合, 不会返回null
+     * @since 1.0.7
+     */
+    public static <E> Set<E> intersection(final Set<E> set, final Set<E>... sets) {
+        if (isEmpty(set) || isNull(sets)) {
+            return Sets.newHashSet();
+        }
+        Set<E> result = newHashSet(set);
+        for (Set<E> s : sets) {
+            result = intersection(result, s);
+        }
+        return result;
+    }
+
+    /**
+     * 取集合交集, 所有集合中都包含的元素即为交集
+     * <pre>{@code
+     * // 实例:
+     * Set<String> set1 = Sets.newHashSet("1", "2", "3");
+     * Set<String> set2 = Sets.newHashSet("2", "3", "4", "5");
+     * Set<String> result = Sets.intersection(set1, set2);
+     * // 结果: ["2", "3"]
+     * }</pre>
+     * @param set1          参数1
+     * @param set2          参数2
+     * @param <E>           集合元素
+     * @return              返回交集集合, 不会返回null
+     * @since 1.0.7
+     */
+    public static <E> Set<E> intersection(final Set<E> set1, final Set<E> set2) {
+        if (isEmpty(set1) || isEmpty(set2)) {
+            return Sets.newHashSet();
+        }
+        return set1.stream().filter(f -> set2.contains(f)).collect(Collectors.toSet());
     }
 }

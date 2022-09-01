@@ -64,4 +64,19 @@ public final class SetsTest {
         Assert.assertNotNull(set2);
         Assert.assertEquals(0, set2.size());
     }
+
+    @Test
+    public void testIntersection() {
+        Set<String> set1 = null;
+        Set<String> set2 = null;
+        Set<String> result1 = Sets.intersection(set1, set2);
+        Assert.assertTrue(result1.size() == 0);
+        set1 = Sets.newHashSet("1", "2", "3");
+        set2 = Sets.newHashSet("2", "3", "4", "5");
+        Set<String> result2 = Sets.intersection(set1, set2);
+        Assert.assertEquals(result2, Sets.newHashSet("2", "3"));
+        Set<String> set3 = Sets.newHashSet("3", "4", "5", "6");
+        Set<String> result3 = Sets.intersection(set1, set2, set3);
+        Assert.assertEquals(result3, Sets.newHashSet("3"));
+    }
 }
