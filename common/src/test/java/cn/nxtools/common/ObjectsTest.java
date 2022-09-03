@@ -4,6 +4,7 @@ import cn.nxtools.common.base.Objects;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,5 +55,15 @@ public final class ObjectsTest {
         Set<String> set = null;
         Set<String> objects = Objects.defaultIfNull(set, () -> new HashSet<>());
         Assert.assertNotNull(objects);
+    }
+
+    @Test
+    public void testNonNullExec() {
+        CollectionUtilTest.User user = null;
+        Objects.nonNullExec(user, b -> b.setUpdateTime(LocalDateTime.now()));
+        CollectionUtilTest.User user1 = new CollectionUtilTest.User();
+        Long millis = 1662205523073L;
+        Objects.nonNullExec(user1, e -> e.setCreateTime(LocalDateTimeUtil.ofMillis(millis)));
+        Assert.assertTrue(user1.getCreateTime().compareTo(LocalDateTimeUtil.ofMillis(millis)) == 0);
     }
 }

@@ -1,5 +1,6 @@
 package cn.nxtools.common.base;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -117,5 +118,29 @@ public final class Objects {
             return defaultValue;
         }
         return mapper.apply(obj);
+    }
+
+    /**
+     * 参数非空时,执行action逻辑, 为空不执行
+     * <pre>{@code
+     * // 实例:
+     * Long millis = 1662205523073L;
+     * User user = new User();
+     * Long millis = 1662205523073L;
+     * Objects.nonNullExec(user, u -> u.setCreateTime(LocalDateTimeUtil.ofMillis(millis)));
+     * int result = user.getCreateTime().compareTo(LocalDateTimeUtil.ofMillis(millis));
+     * // 结果: 0
+     * }</pre>
+     * @param obj           目标参数
+     * @param action        执行操作
+     * @param <T>           参数范型
+     * @since 1.0.7
+     */
+    public static <T> void nonNullExec(T obj, Consumer<? super T> action) {
+        Preconditions.checkNotNull(action);
+        if (isNull(obj)) {
+            return;
+        }
+        action.accept(obj);
     }
 }
