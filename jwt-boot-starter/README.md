@@ -4,12 +4,12 @@
 <dependency>
     <groupId>cn.nxtools</groupId>
     <artifactId>jwt-boot-starter</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 </dependency>
 ```
 ### Gradle
 ```groovy
-implementation 'cn.nxtools:jwt-boot-starter:1.0.6'
+implementation 'cn.nxtools:jwt-boot-starter:1.0.7'
 ```
 
 ## 配置参数
@@ -22,6 +22,7 @@ implementation 'cn.nxtools:jwt-boot-starter:1.0.6'
 |nxtools.jwt.refreshExpiration|2592000|refresh token超时时间,单位秒|
 |nxtools.jwt.header|Authorization|token通过http header传输时的key值|
 |nxtools.jwt.tokenPrefix|null|token值固定前缀|
+|nxtools.jwt.claims|null|自定义jwt claims中的内容|
 |nxtools.jwt.enabledLogout|false|是否启用注销功能。如果为true, 在调用退出方法时,会进行保存退出数据。支持redis和内存俩种方式,有redis优先redis否则存储内存|
 |nxtools.jwt.logoutAllClients|false|是否注销全部客户端token,默认只失效当前token。enabledLogout=true时,该字段才会生效。为true时,一个客户端退出登陆,所有客户端的token都将失效。支持redis和内存俩种方式,有redis优先redis否则存储内存|
 |nxtools.jwt.refreshTokenPermissions|ROLE_REFRESH_TOKEN_PERMISSIONS|refresh_token 权限字符串。限制refresh_token的权限，使refresh_token只能用来重置access_token。如: @PreAuthorize("hasAnyRole('ROLE_REFRESH_TOKEN_PERMISSIONS')")|
