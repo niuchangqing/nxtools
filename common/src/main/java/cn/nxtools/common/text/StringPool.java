@@ -56,4 +56,9 @@ public interface StringPool {
      * @since 1.0.7
      */
     String EMPTY_ARRAY = "[]";
+
+    /**
+     * 减号字符串
+     */
+    String DASHED = "-";
 }
