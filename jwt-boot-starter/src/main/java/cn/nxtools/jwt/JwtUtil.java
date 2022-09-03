@@ -12,7 +12,10 @@ import cn.nxtools.jwt.config.JwtSecretKey;
 import cn.nxtools.jwt.domain.CustomUserDetail;
 import cn.nxtools.jwt.domain.JwtTokenDto;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -121,7 +124,6 @@ public class JwtUtil {
         //access_token
         Claims claims = null;
         try {
-            JwtParser parser = Jwts.parser();
             if (jwtServerProperties.getSignatureAlgorithm().isNone()) {
                 //无签名算法
                 claims = Jwts.parser()
@@ -364,6 +366,7 @@ public class JwtUtil {
      */
     private String generateToken(String subject, Map<String, Object> claims, long expiration) {
         Date date = new Date();
+        claims.putAll(jwtServerProperties.getClaims());
         JwtBuilder jwtBuilder = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
@@ -372,8 +375,8 @@ public class JwtUtil {
                 //token生成时间
                 .setIssuedAt(date)
                 //过期时间
-                .setExpiration(new Date(date.getTime() + expiration * 1000))
-                .compressWith(CompressionCodecs.DEFLATE);
+                .setExpiration(new Date(date.getTime() + expiration * 1000));
+
         if (jwtServerProperties.getSignatureAlgorithm().isNone()) {
             //不需要签名算法
         } else if (jwtServerProperties.getSignatureAlgorithm().isHmac()) {

@@ -1,8 +1,11 @@
 package cn.nxtools.jwt.autoconfigure;
 
+import cn.nxtools.common.collect.Maps;
 import cn.nxtools.jwt.JwtUtil;
 import cn.nxtools.jwt.enums.SignatureAlgorithm;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.Map;
 
 /**
  * @author ncq
@@ -16,9 +19,9 @@ public class JwtServerProperties {
     private Boolean enabled = true;
 
     /**
-     * 生成/解析Token密钥,长度要大于等于4
+     * 生成/解析Token密钥
+     * 仅对称加密算法时该字段有效, 对称加密方式必须有值
      */
-    //仅对称加密算法时该字段有效,非对称加密算法可以为空
     private String secret;
 
     /**
@@ -67,6 +70,11 @@ public class JwtServerProperties {
      * @PreAuthorize("hasAnyRole('ROLE_REFRESH_TOKEN_PERMISSIONS')")
      */
     private String refreshTokenPermissions = JwtUtil.REFRESH_TOKEN_PERMISSIONS;
+
+    /**
+     * 自定义token中的claims内容
+     */
+    private Map<String, Object> claims = Maps.newHashMap();
 
     public String getSecret() {
         return secret;
@@ -146,5 +154,13 @@ public class JwtServerProperties {
 
     public void setRefreshTokenPermissions(String refreshTokenPermissions) {
         this.refreshTokenPermissions = refreshTokenPermissions;
+    }
+
+    public Map<String, Object> getClaims() {
+        return this.claims;
+    }
+
+    public void setClaims(Map<String, Object> claims) {
+        this.claims = claims;
     }
 }

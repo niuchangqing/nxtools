@@ -44,6 +44,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         if (StringUtil.isNotEmpty(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            token = token.trim();
             CustomUserDetail userDetail = jwtUtil.tokenToUser(token);
             if (jwtUtil.checkToken(token, userDetail)) {
                 //token有效

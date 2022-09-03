@@ -1,0 +1,36 @@
+server:
+  port: 8001
+#none
+nxtools:
+  jwt:
+    token-prefix: ${TOKEN_PREFIX:Bearer }
+    #none
+#    signature-algorithm: NONE
+    claims: {"iss":"jwt-demo"}
+    #HS512
+#    signature-algorithm: hs512
+#    secret: 1234
+    signature-algorithm: rs256
+  security:
+    #不校验权限路径
+    permit-urls: /api/login
+
+key:
+  private: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAO8+HGm9rZTC0zmL
+    22euG4O7YVQZKngZOaqrb8sHVbx0Vw9VHK8PPDWuLlY2gjbxZjmGDbywpJwWfMTg
+    vAtbCBPdUQqScdAIXBS8lX2YtuO0LRmV6qp/mEgXlhvG9n+C92uQ7IaayAAAgEjy
+    TrWB3YhN0AA4Un2j264dv7oUlucrAgMBAAECgYEAmlx73qn4jmwp9w5K8RmAPT2w
+    bZ+TLEwyTfExP1ErO13hMk5bJIRy97u7v/qJh8O3jlP1FxLuEpvbwvexvK3uhgs0
+    1TGP/MN1hHG3ov/BkHncUoDIelFIT9flY16PpgTIUTyhg625ypZoLPDpcmb/b5tt
+    +Gcl8WjVK/jsg+/WsNECQQD772CTH4OmhUMxy+SmDf5lkjjTpZyqckl1k1rbpK70
+    Uzt4bVqW+N4ll6gxcrqwfubB8NI6T6IcFueBfnzX32FTAkEA8xpOrhwkV+WBqYSU
+    8Ap7NJRTPgj0LTI90BHCnuj0A4bkRhR71Ngb0WMPHTHnjQNd9WX2392MZ2TAhPGB
+    vm3vyQJAFQQb/0nitpJpT48drMiAD0MKYIVxMzrDa/511tq/CXyj+mDM7Mkn5uTm
+    z/EtJ6n+X/FR6DFaaZNzjnbZvTxSJwJARd+437h9BbqU0zmlaX1JvmonpvwB2v/G
+    3ohMTUqd4GmkMTRwB1R6Ymu7i2Otr01Zc1B0bhIK6ij+YPfdl/OXaQJASRzv5+hm
+    hRg+D8vKQuwBQlGprx3ruBHwSMoUQ/l4OVC/pydDiAUUn5++ncII1Zd59LHvXvSY
+    LHFAnF48bGFsBA==
+  public: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDvPhxpva2UwtM5i9tnrhuDu2FU
+    GSp4GTmqq2/LB1W8dFcPVRyvDzw1ri5WNoI28WY5hg28sKScFnzE4LwLWwgT3VEK
+    knHQCFwUvJV9mLbjtC0Zleqqf5hIF5YbxvZ/gvdrkOyGmsgAAIBI8k61gd2ITdAA
+    OFJ9o9uuHb+6FJbnKwIDAQAB
