@@ -189,10 +189,11 @@ public class CollectionUtil {
 
     /**
      * 当参数集合为null时返回默认值, 不为null时返回目标参数
-     * <pre>
-     * Example:
-     *     HashSet<Integer> set = null;
-     *     HashSet<Integer> set1 = CollectionUtil.defaultIfNull(set, () -> new HashSet<>());
+     * <pre>{@code
+     * // 实例:
+     * HashSet<Integer> set = null;
+     * HashSet<Integer> set1 = CollectionUtil.defaultIfNull(set, () -> new HashSet<>());
+     * }
      * </pre>
      * @param collection            目标参数
      * @param supplier              默认值, 懒加载函数
@@ -208,10 +209,11 @@ public class CollectionUtil {
 
     /**
      * 当参数集合为null或[]时返回默认值, 否则返回目标参数
-     * <pre>
-     *  Example:
-     *      HashSet<String> hashSet = Sets.newHashSet();
-     *      HashSet<String> objects = CollectionUtil.defaultIfEmpty(hashSet, () -> Sets.newHashSet("1"));
+     * <pre>{@code
+     * // 实例:
+     * HashSet<String> hashSet = Sets.newHashSet();
+     * HashSet<String> objects = CollectionUtil.defaultIfEmpty(hashSet, () -> Sets.newHashSet("1"));
+     * }
      * </pre>
      * @param collection            目标参数
      * @param supplier              默认值, 懒加载函数
@@ -226,10 +228,10 @@ public class CollectionUtil {
 
     /**
      * 当map为null时返回默认值, 否则返回目标参数
-     * <pre>
-     *  Example:
-     *     HashMap<String, Integer> map = null;
-     *     HashMap<String, Integer> map1 = CollectionUtil.defaultIfNull(map, () -> Maps.newHashMap());
+     * <pre>{@code
+     * HashMap<String, Integer> map = null;
+     * HashMap<String, Integer> map1 = CollectionUtil.defaultIfNull(map, () -> Maps.newHashMap());
+     * }
      * </pre>
      * @param map                   目标参数
      * @param supplier              默认值, 懒加载函数
@@ -238,7 +240,7 @@ public class CollectionUtil {
      * @param <V>                   map value类型
      * @return                      null时返回map, 否则返回defaultMap
      * @see Objects#defaultIfNull(Object, Supplier)
-     * @see 1.0.7
+     * @since  1.0.7
      */
     public static <T extends Map<K, V>, K, V> T defaultIfNull(final T map, final Supplier<? extends T> supplier) {
         return isNull(map) ? supplier.get() : map;
@@ -246,12 +248,12 @@ public class CollectionUtil {
 
     /**
      * 当map为null或{}时返回默认值, 否则返回目标参数
-     * <pre>
-     *  Example:
-     *     LinkedHashMap<String, String> map2 = Maps.newLinkedHashMap();
-     *     LinkedHashMap<String, String> map4 = Maps.newLinkedHashMap();
-     *     map4.put("1","1");
-     *     HashMap<String, String> map3 = CollectionUtil.defaultIfEmpty(map2, () -> map4);
+     * <pre>{@code
+     * LinkedHashMap<String, String> map2 = Maps.newLinkedHashMap();
+     * LinkedHashMap<String, String> map4 = Maps.newLinkedHashMap();
+     * map4.put("1","1");
+     * HashMap<String, String> map3 = CollectionUtil.defaultIfEmpty(map2, () -> map4);
+     * }
      * </pre>
      * @param map                   目标参数
      * @param supplier              默认值, 懒加载函数

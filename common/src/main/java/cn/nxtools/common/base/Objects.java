@@ -46,10 +46,11 @@ public final class Objects {
 
     /**
      * 对象为空即返回默认值,否则返回当前对象
-     * <pre>
-     *  Example:
-     *      String object = null;
-     *      String s1 = Objects.defaultIfNull(object, () -> StringUtil.EMPTY);
+     * <pre>{@code
+     *  // 实例:
+     *  String object = null;
+     *  String s1 = Objects.defaultIfNull(object, () -> StringUtil.EMPTY);
+     * }
      * </pre>
      * @param obj           指定对象
      * @param supplier      懒加载函数
