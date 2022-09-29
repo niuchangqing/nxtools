@@ -10,7 +10,7 @@ dependencies {
     api group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: "${springBootVersion}"
     implementation group: "org.springframework.security", name: "spring-security-jwt", version: "${springSecurityJwtVersion}"
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: "${jjwtVersion}"
-    implementation "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
+    implementation group: 'org.springframework.data', name: 'spring-data-redis', version: '2.7.3'
 }
 
 publishing {

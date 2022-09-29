@@ -447,7 +447,7 @@ public class JwtUtil {
                 String key = String.format(REDIS_TOKEN_DEADLINE_KEY, claims.getId());
                 long timeout = claims.getExpiration().getTime() - LocalDateTimeUtil.currentTimeMillis();
                 if (timeout > 0) {
-                    redisTemplate.opsForValue().set(key, String.valueOf(LocalDateTimeUtil.currentTimeSecond()), timeout, TimeUnit.MILLISECONDS);
+                    redisTemplate.opsForValue().set(key, String.valueOf(LocalDateTimeUtil.currentTimeMillis()), timeout, TimeUnit.MILLISECONDS);
                 }
             }
         } else {
